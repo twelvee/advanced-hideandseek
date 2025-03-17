@@ -47,7 +47,7 @@ public final class AdvancedHNS extends JavaPlugin {
             if (dbType.equalsIgnoreCase("mysql")) {
                 connection = DriverManager.getConnection("jdbc:mysql://"+dbHost+":"+dbPort+"/"+dbName, dbUser, dbPassword);
             } else {
-                getLogger().severe(HNS_PREFIX + " Unsupported database type: " + dbType + ", valid options: h2, mysql");
+                getLogger().severe(HNS_PREFIX + " Unsupported database type: " + dbType + ", plugins currently support only mysql.");
             }
         } catch (SQLException e) {
             getLogger().severe(HNS_PREFIX + " Failed to connect to database: " + e.getMessage());
