@@ -18,12 +18,18 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
     private final HelpCommandHandler helpCommandHandler;
     private final ChangeWorldCommandHandler worldTpCommandHandler;
     private final CreateArenaCommandHandler createArenaCommandHandler;
+    private final DeleteArenaCommandHandler deleteArenaCommandHandler;
+    private final EditArenaCommandHandler editArenaCommandHandler;
+    private final SaveArenaCommandHandler saveArenaCommandHandler;
 
     public CommandExecutor() {
         aboutCommandHandler = new AboutCommandHandler();
         helpCommandHandler = new HelpCommandHandler();
         worldTpCommandHandler = new ChangeWorldCommandHandler();
         createArenaCommandHandler = new CreateArenaCommandHandler();
+        deleteArenaCommandHandler = new DeleteArenaCommandHandler();
+        editArenaCommandHandler = new EditArenaCommandHandler();
+        saveArenaCommandHandler = new SaveArenaCommandHandler();
     }
 
     @Override
@@ -49,6 +55,15 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
                         if (args[2].equalsIgnoreCase("create")) {
                             // hns admin arena create [name]
                             return createArenaCommandHandler.Handle(sender, command, label, args);
+                        }
+                        if (args[2].equalsIgnoreCase("delete")) {
+                            return deleteArenaCommandHandler.Handle(sender, command, label, args);
+                        }
+                        if (args[2].equalsIgnoreCase("edit")) {
+                            return editArenaCommandHandler.Handle(sender, command, label, args);
+                        }
+                        if (args[2].equalsIgnoreCase("save")) {
+                            return saveArenaCommandHandler.Handle(sender, command, label, args);
                         }
                     }
                 }
