@@ -5,6 +5,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import ru.bandamc.advancedHNS.command.CommandExecutor;
 import ru.bandamc.advancedHNS.database.ArenaRepository;
 import ru.bandamc.advancedHNS.entities.Arena;
+import ru.bandamc.advancedHNS.events.OnPlayerJoinServerEvent;
+import ru.bandamc.advancedHNS.events.OnPlayerLeftServerEvent;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -30,7 +32,13 @@ public final class AdvancedHNS extends JavaPlugin {
         saveDefaultConfig();
         arenaRepository = new ArenaRepository(this);
         initDatabase();
+        registerEvents();
         getCommand("hns").setExecutor(new CommandExecutor());
+    }
+
+    private void registerEvents() {
+        getServer().getPluginManager().registerEvents(new OnPlayerJoinServerEvent(), this);
+        getServer().getPluginManager().registerEvents(new OnPlayerLeftServerEvent(), this);
     }
 
     public ArenaRepository getArenaRepository() {
