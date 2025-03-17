@@ -1,5 +1,6 @@
 package ru.bandamc.advancedHNS.database;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.bandamc.advancedHNS.AdvancedHNS;
 import ru.bandamc.advancedHNS.entities.Arena;
@@ -32,7 +33,7 @@ public class ArenaRepository {
     }
 
     public void changeArenaStatus(String name, int status) throws SQLException {
-        PreparedStatement sql = plugin.getConnection().prepareStatement("UPDATE `hns_arenas` SET `status`=? WHERE name=?");
+        PreparedStatement sql = plugin.getConnection().prepareStatement("UPDATE `hns_arenas` SET `status`=? WHERE `name`=?");
         sql.setInt(1, status);
         sql.setString(2, name);
         sql.execute();
@@ -45,8 +46,9 @@ public class ArenaRepository {
     }
 
     public ResultSet getArenaInfo(String name) throws SQLException {
-        PreparedStatement sql = plugin.getConnection().prepareStatement("SELECT * FROM `hns_arenas` WHERE name=?");
+        PreparedStatement sql = plugin.getConnection().prepareStatement("SELECT * FROM `hns_arenas` WHERE `name`=?");
         sql.setString(1, name);
+        Bukkit.getLogger().info(sql.toString());
         return sql.executeQuery();
     }
 

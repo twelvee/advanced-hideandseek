@@ -24,9 +24,13 @@ public class SaveArenaCommandHandler implements CommandHandler {
             String arenaName = args[3]; // hns admin arena save ->name<-
             AdvancedHNS plugin = JavaPlugin.getPlugin(AdvancedHNS.class);
             if (!arenaName.equalsIgnoreCase(" ")) {
-                Arena arena = plugin.arenaEdits.get(player);
-                String language = player.getClientOption(ClientOption.LOCALE);
 
+                String language = player.getClientOption(ClientOption.LOCALE);
+                if (!plugin.arenaEdits.containsKey(player)) {
+                    player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.user_not_edit_arena").replace("{name}", arenaName));
+                    return false;
+                }
+                Arena arena = plugin.arenaEdits.get(player);
                 try {
                     ResultSet resultSet = plugin.getArenaRepository().getArenaInfo(arenaName);
                     if (!resultSet.isBeforeFirst()) {
@@ -56,6 +60,10 @@ public class SaveArenaCommandHandler implements CommandHandler {
                 }
 
                 try {
+                    if (arena == null) {
+                        player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.arena_not_found").replace("{name}", arenaName));
+                        return false;
+                    }
                     if (!arena.validateToStore()) {
                         player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " "+LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.arena_save_failed_errors").replace("{name}", arenaName));
                         for(var msg : arena.getValidationErrors()) {

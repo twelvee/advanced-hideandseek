@@ -5,6 +5,7 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,6 +25,14 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
     private final DeleteArenaCommandHandler deleteArenaCommandHandler;
     private final EditArenaCommandHandler editArenaCommandHandler;
     private final SaveArenaCommandHandler saveArenaCommandHandler;
+    private final SetPos1CommandHandler setPos1CommandHandler;
+    private final SetPos2CommandHandler setPos2CommandHandler;
+    private final SetMaxHidersCommandHandler setMaxHidersCommandHandler;
+    private final SetMaxSeekersCommandHandler setMaxSeekersCommandHandler;
+    private final SetHidersSpawnPosCommandHandler setHidersSpawnPosCommandHandler;
+    private final SetSeekersSpawnPosCommandHandler setSeekersSpawnPosCommandHandler;
+    private final SetLobbyPosCommandHandler setLobbyPosCommandHandler;
+    private final SetSpecPosCommandHandler setSpecPosCommandHandler;
 
     public CommandExecutor() {
         aboutCommandHandler = new AboutCommandHandler();
@@ -33,6 +42,14 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
         deleteArenaCommandHandler = new DeleteArenaCommandHandler();
         editArenaCommandHandler = new EditArenaCommandHandler();
         saveArenaCommandHandler = new SaveArenaCommandHandler();
+        setPos1CommandHandler = new SetPos1CommandHandler();
+        setPos2CommandHandler = new SetPos2CommandHandler();
+        setMaxHidersCommandHandler = new SetMaxHidersCommandHandler();
+        setMaxSeekersCommandHandler = new SetMaxSeekersCommandHandler();
+        setHidersSpawnPosCommandHandler = new SetHidersSpawnPosCommandHandler();
+        setSeekersSpawnPosCommandHandler = new SetSeekersSpawnPosCommandHandler();
+        setLobbyPosCommandHandler = new SetLobbyPosCommandHandler();
+        setSpecPosCommandHandler = new SetSpecPosCommandHandler();
     }
 
     @Override
@@ -63,10 +80,38 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
                             return deleteArenaCommandHandler.Handle(sender, command, label, args);
                         }
                         if (args[2].equalsIgnoreCase("edit")) {
-                            return editArenaCommandHandler.Handle(sender, command, label, args);
+                            try {
+                                return editArenaCommandHandler.Handle(sender, command, label, args);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                         if (args[2].equalsIgnoreCase("save")) {
                             return saveArenaCommandHandler.Handle(sender, command, label, args);
+                        }
+                        if (args[2].equalsIgnoreCase("pos1")) {
+                            return setPos1CommandHandler.Handle(sender, command, label, args);
+                        }
+                        if (args[2].equalsIgnoreCase("pos2")) {
+                            return setPos2CommandHandler.Handle(sender, command, label, args);
+                        }
+                        if (args[2].equalsIgnoreCase("spec")) {
+                            return setSpecPosCommandHandler.Handle(sender, command, label, args);
+                        }
+                        if (args[2].equalsIgnoreCase("lobby")) {
+                            return setLobbyPosCommandHandler.Handle(sender, command, label, args);
+                        }
+                        if (args[2].equalsIgnoreCase("seekers_spawn")) {
+                            return setSeekersSpawnPosCommandHandler.Handle(sender, command, label, args);
+                        }
+                        if (args[2].equalsIgnoreCase("hiders_spawn")) {
+                            return setHidersSpawnPosCommandHandler.Handle(sender, command, label, args);
+                        }
+                        if (args[2].equalsIgnoreCase("max_hiders")) {
+                            return setMaxHidersCommandHandler.Handle(sender, command, label, args);
+                        }
+                        if (args[2].equalsIgnoreCase("max_seekers")) {
+                            return setMaxSeekersCommandHandler.Handle(sender, command, label, args);
                         }
                     }
                 }
@@ -93,10 +138,11 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
         }
 
         if (args.length == 3 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("arena")) {
-            return Arrays.asList("create", "delete", "edit", "save");
+            return Arrays.asList("create", "delete", "edit", "save", "pos1", "pos2", "spec", "lobby", "seekers_spawn", "hiders_spawn", "max_hiders", "max_seekers");
         }
 
-        if (args.length == 4 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("arena") && !args[2].equalsIgnoreCase("create")) {
+        // create
+        if (args.length == 4 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("arena") && (args[2].equalsIgnoreCase("edit") || args[2].equalsIgnoreCase("save") || args[2].equalsIgnoreCase("delete"))) {
             AdvancedHNS plugin = JavaPlugin.getPlugin(AdvancedHNS.class);
             ArrayList<String> arenas = new ArrayList<>();
             ResultSet allArenas;
@@ -112,7 +158,10 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
+            }
 
+            if (sender instanceof Player player && plugin.arenaEdits.containsKey(player)) {
+                arenas.add(plugin.arenaEdits.get(player).getName());
             }
             return arenas;
         }
