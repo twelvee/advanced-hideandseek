@@ -1,12 +1,15 @@
 package ru.bandamc.advancedHNS;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.bandamc.advancedHNS.command.CommandExecutor;
 import ru.bandamc.advancedHNS.database.ArenaRepository;
+import ru.bandamc.advancedHNS.entities.Arena;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 public final class AdvancedHNS extends JavaPlugin {
 
@@ -14,6 +17,8 @@ public final class AdvancedHNS extends JavaPlugin {
     static public String HNS_CHAT_PREFIX = "§6[Advanced HideAndSeek]§f";
 
     private ArenaRepository arenaRepository;
+
+    public HashMap<Player, Arena> arenaEdits = new HashMap<>();
 
     private Connection connection;
 

@@ -20,7 +20,7 @@ public class DeleteArenaCommandHandler implements CommandHandler {
             return false;
         }
         if (sender instanceof Player player) {
-            String arenaName = args[3]; // hns admin arena create ->name<-
+            String arenaName = args[3]; // hns admin arena delete ->name<-
             AdvancedHNS plugin = JavaPlugin.getPlugin(AdvancedHNS.class);
             if (!arenaName.equalsIgnoreCase(" ")) {
                 String language = player.getClientOption(ClientOption.LOCALE);
@@ -36,6 +36,7 @@ public class DeleteArenaCommandHandler implements CommandHandler {
                 }
                 try {
                     plugin.getArenaRepository().deleteArena(arenaName);
+                    plugin.arenaEdits.remove(player);
                     player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.arena_delete_success").replace("{name}", arenaName));
                     return true;
                 } catch (SQLException e) {

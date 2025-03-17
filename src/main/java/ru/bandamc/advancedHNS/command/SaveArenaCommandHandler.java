@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.bandamc.advancedHNS.AdvancedHNS;
 import ru.bandamc.advancedHNS.LocalizationManager;
+import ru.bandamc.advancedHNS.entities.Arena;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,22 +21,50 @@ public class SaveArenaCommandHandler implements CommandHandler {
             return false;
         }
         if (sender instanceof Player player) {
-            String arenaName = args[3]; // hns admin arena create ->name<-
+            String arenaName = args[3]; // hns admin arena save ->name<-
             AdvancedHNS plugin = JavaPlugin.getPlugin(AdvancedHNS.class);
             if (!arenaName.equalsIgnoreCase(" ")) {
+                Arena arena = plugin.arenaEdits.get(player);
                 String language = player.getClientOption(ClientOption.LOCALE);
+
                 try {
-                    ResultSet arena = plugin.getArenaRepository().getArenaInfo(arenaName);
-                    if (!arena.isBeforeFirst()) {
-                        player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.arena_not_found").replace("{name}", arenaName));
+                    ResultSet resultSet = plugin.getArenaRepository().getArenaInfo(arenaName);
+                    if (!resultSet.isBeforeFirst()) {
+                        if (plugin.arenaEdits.containsKey(player)) {
+                            try {
+                                if (!arena.validateToStore()) {
+                                    player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " "+LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.arena_save_failed_errors").replace("{name}", arenaName));
+                                    for(var msg : arena.getValidationErrors()) {
+                                        player.sendMessage(msg);
+                                    }
+                                    return false;
+                                }
+                                plugin.getArenaRepository().createArena(arena);
+                                player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.arena_save_success").replace("{name}", arenaName));
+                                plugin.arenaEdits.remove(player);
+                                return true;
+                            } catch (SQLException e) {
+                                player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.arena_create_failed").replace("{name}", arenaName));
+                                return false;
+                            }
+                        }
                         return false;
                     }
                 } catch (SQLException e) {
                     player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.arena_not_found").replace("{name}", arenaName));
                     return false;
                 }
+
                 try {
-                    plugin.getArenaRepository().changeArenaStatus(arenaName, 1);
+                    if (!arena.validateToStore()) {
+                        player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " "+LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.arena_save_failed_errors").replace("{name}", arenaName));
+                        for(var msg : arena.getValidationErrors()) {
+                            player.sendMessage(msg);
+                        }
+                        return false;
+                    }
+                    plugin.getArenaRepository().updateArena(plugin.arenaEdits.get(player));
+                    plugin.arenaEdits.remove(player);
                     player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.arena_save_success").replace("{name}", arenaName));
                     return true;
                 } catch (SQLException e) {
