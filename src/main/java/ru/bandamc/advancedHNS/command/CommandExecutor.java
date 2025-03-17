@@ -17,11 +17,13 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
     private final AboutCommandHandler aboutCommandHandler;
     private final HelpCommandHandler helpCommandHandler;
     private final ChangeWorldCommandHandler worldTpCommandHandler;
+    private final CreateArenaCommandHandler createArenaCommandHandler;
 
     public CommandExecutor() {
         aboutCommandHandler = new AboutCommandHandler();
         helpCommandHandler = new HelpCommandHandler();
         worldTpCommandHandler = new ChangeWorldCommandHandler();
+        createArenaCommandHandler = new CreateArenaCommandHandler();
     }
 
     @Override
@@ -38,6 +40,15 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
                     if (args.length >= 3) {
                         if (args[2].equalsIgnoreCase("tp")) {
                             return worldTpCommandHandler.Handle(sender, command, label, args);
+                        }
+                    }
+                }
+                if (args[1].equalsIgnoreCase("arena")) {
+                    // hns admin arena
+                    if (args.length >= 3) {
+                        if (args[2].equalsIgnoreCase("create")) {
+                            // hns admin arena create [name]
+                            return createArenaCommandHandler.Handle(sender, command, label, args);
                         }
                     }
                 }
@@ -62,6 +73,11 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
         if (args.length == 3 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("world")) {
             return List.of("tp");
         }
+
+        if (args.length == 3 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("arena")) {
+            return Arrays.asList("create", "delete", "edit", "save");
+        }
+
         if (args.length == 4 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("world") && args[2].equalsIgnoreCase("tp")) {
             ArrayList<String> worlds = new ArrayList<>();
             for (World world : Bukkit.getWorlds()) {

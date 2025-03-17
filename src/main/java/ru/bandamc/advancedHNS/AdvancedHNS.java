@@ -2,6 +2,7 @@ package ru.bandamc.advancedHNS;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.bandamc.advancedHNS.command.CommandExecutor;
+import ru.bandamc.advancedHNS.database.ArenaRepository;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,6 +13,8 @@ public final class AdvancedHNS extends JavaPlugin {
     static public String HNS_PREFIX = "[Advanced HideAndSeek]";
     static public String HNS_CHAT_PREFIX = "§6[Advanced HideAndSeek]§f";
 
+    private ArenaRepository arenaRepository;
+
     private Connection connection;
 
     @Override
@@ -20,8 +23,13 @@ public final class AdvancedHNS extends JavaPlugin {
         saveResource("localization.yml", false);
         LocalizationManager.getInstance();
         saveDefaultConfig();
+        arenaRepository = new ArenaRepository(this);
         initDatabase();
         getCommand("hns").setExecutor(new CommandExecutor());
+    }
+
+    public ArenaRepository getArenaRepository() {
+        return arenaRepository;
     }
 
     @Override
@@ -35,6 +43,10 @@ public final class AdvancedHNS extends JavaPlugin {
         }
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
+
     private void initDatabase() {
         String dbType = getConfig().getString("database.type", "mysql");
         String dbHost = getConfig().getString("database.host", "127.0.0.1");
@@ -45,7 +57,7 @@ public final class AdvancedHNS extends JavaPlugin {
 
         try {
             if (dbType.equalsIgnoreCase("mysql")) {
-                connection = DriverManager.getConnection("jdbc:mysql://"+dbHost+":"+dbPort+"/"+dbName, dbUser, dbPassword);
+                connection = DriverManager.getConnection("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName, dbUser, dbPassword);
             } else {
                 getLogger().severe(HNS_PREFIX + " Unsupported database type: " + dbType + ", plugins currently support only mysql.");
             }
