@@ -12,6 +12,10 @@ import ru.bandamc.advancedHNS.LocalizationManager;
 public class ChangeWorldCommandHandler implements CommandHandler {
     @Override
     public boolean Handle(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length < 4) {
+            // world not specified.
+            return false;
+        }
         if (sender instanceof Player player) {
             World world = Bukkit.getWorld(args[3]);
             if (world != null) {

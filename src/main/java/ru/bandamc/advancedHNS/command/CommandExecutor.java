@@ -28,13 +28,18 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length == 0) {
             return aboutCommandHandler.Handle(sender, command, label, args);
-        } else if (args[0].equalsIgnoreCase("help")) {
+        }
+        if (args[0].equalsIgnoreCase("help")) {
             return helpCommandHandler.Handle(sender, command, label, args);
         } else if (args[0].equalsIgnoreCase("admin")) {
-            if (args[1].equalsIgnoreCase("world")) {
-                // hns admin world
-                if (args[2].equalsIgnoreCase("tp")) {
-                    return worldTpCommandHandler.Handle(sender, command, label, args);
+            if (args.length >= 2) {
+                if (args[1].equalsIgnoreCase("world")) {
+                    // hns admin world
+                    if (args.length >= 3) {
+                        if (args[2].equalsIgnoreCase("tp")) {
+                            return worldTpCommandHandler.Handle(sender, command, label, args);
+                        }
+                    }
                 }
             }
         }
