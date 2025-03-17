@@ -25,6 +25,16 @@ public class EditArenaCommandHandler implements CommandHandler {
             if (!arenaName.equalsIgnoreCase(" ")) {
                 String language = player.getClientOption(ClientOption.LOCALE);
                 try {
+                    ResultSet arena = plugin.getArenaRepository().getArenaInfo(arenaName);
+                    if (!arena.isBeforeFirst()) {
+                        player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.arena_not_found").replace("{name}", arenaName));
+                        return false;
+                    }
+                } catch (SQLException e) {
+                    player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.arena_not_found").replace("{name}", arenaName));
+                    return false;
+                }
+                try {
                     plugin.getArenaRepository().changeArenaStatus(arenaName, 0);
                     player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.arena_edit_start_success").replace("{name}", arenaName));
                     return true;

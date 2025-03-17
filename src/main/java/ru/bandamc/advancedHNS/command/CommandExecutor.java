@@ -5,10 +5,13 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.bandamc.advancedHNS.AdvancedHNS;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -91,6 +94,27 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
 
         if (args.length == 3 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("arena")) {
             return Arrays.asList("create", "delete", "edit", "save");
+        }
+
+        if (args.length == 4 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("arena") && !args[2].equalsIgnoreCase("create")) {
+            AdvancedHNS plugin = JavaPlugin.getPlugin(AdvancedHNS.class);
+            ArrayList<String> arenas = new ArrayList<>();
+            ResultSet allArenas;
+            try {
+                allArenas = plugin.getArenaRepository().getAllArenas();
+            } catch (SQLException e) {
+                return List.of();
+            }
+            while(true) {
+                try {
+                    if (!allArenas.next()) break;
+                    arenas.add(allArenas.getString("name"));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+            return arenas;
         }
 
         if (args.length == 4 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("world") && args[2].equalsIgnoreCase("tp")) {
