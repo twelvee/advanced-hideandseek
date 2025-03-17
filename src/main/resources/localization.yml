@@ -1,0 +1,9 @@
+ru:
+  admin:
+    teleported_to_world: "Успешно телепортирован в мир {world}"
+
+en:
+  admin:
+    teleported_to_world: "Successfully teleported to {world}"
+
+fallback_locale: en
