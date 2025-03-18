@@ -40,11 +40,14 @@ public class DeleteArenaCommandHandler implements CommandHandler {
                 try {
                     plugin.getArenaRepository().deleteArena(arenaName);
                     Arena arena = plugin.arenaEdits.get(player);
+
                     ArenaDeleteEvent event = new ArenaDeleteEvent(player, arena);
                     Bukkit.getPluginManager().callEvent(event);
+
                     if (!event.isCancelled()) {
                         plugin.arenaEdits.remove(event.getPlayer());
                     }
+
                     return true;
                 } catch (SQLException e) {
                     player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.arena_delete_failed").replace("{name}", arenaName));

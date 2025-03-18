@@ -59,9 +59,12 @@ public class CreateArenaCommandHandler implements CommandHandler {
                 arena.setHidersSpawnPos(player.getWorld().getName() + "|0|0|0");
                 arena.setSeekersSpawnPos(player.getWorld().getName() + "|0|0|0");
 
-                plugin.arenaEdits.put(player, arena);
+                ArenaInitEvent event = new ArenaInitEvent(player, arena);
+                Bukkit.getPluginManager().callEvent(event);
 
-                Bukkit.getPluginManager().callEvent(new ArenaInitEvent(player, arena));
+                if (!event.isCancelled())
+                    plugin.arenaEdits.put(event.getPlayer(), event.getArena());
+
                 return true;
 
             }
