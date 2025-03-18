@@ -9,8 +9,11 @@ import ru.bandamc.advancedHNS.events.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public final class AdvancedHNS extends JavaPlugin {
 
@@ -19,6 +22,9 @@ public final class AdvancedHNS extends JavaPlugin {
 
     private ArenaRepository arenaRepository;
 
+    public HashMap<String, Arena> arenas = new HashMap<>();
+    public HashMap<Arena, ArrayList<Player>> arenaPlayers = new HashMap<>();
+    public HashMap<Player, Arena> playerArena = new HashMap<>();
     public HashMap<Player, Arena> arenaEdits = new HashMap<>();
 
     private Connection connection;
@@ -31,8 +37,40 @@ public final class AdvancedHNS extends JavaPlugin {
         saveDefaultConfig();
         arenaRepository = new ArenaRepository(this);
         initDatabase();
+
+        listAllArenas();
+
         registerEvents();
         getCommand("hns").setExecutor(new CommandExecutor());
+    }
+
+    public void listAllArenas() {
+        ResultSet allArenas;
+        try {
+            allArenas = this.arenaRepository.getAllArenas();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        while (true) {
+            try {
+                if (!allArenas.next()) break;
+                Arena arena = new Arena();
+                arena.setName(allArenas.getString("name"));
+                arena.setWorld(allArenas.getString("world"));
+                arena.setMaxHiders(allArenas.getInt("max_hiders"));
+                arena.setMaxSeekers(allArenas.getInt("max_seekers"));
+                arena.setPos1(allArenas.getString("pos1"));
+                arena.setPos2(allArenas.getString("pos2"));
+                arena.setSpecPos(allArenas.getString("spec_pos"));
+                arena.setLobbyPos(allArenas.getString("lobby_pos"));
+                arena.setSeekersSpawnPos(allArenas.getString("seekers_spawn_point"));
+                arena.setHidersSpawnPos(allArenas.getString("hiders_spawn_point"));
+                arena.setStatus(allArenas.getInt("status"));
+                arenas.put(allArenas.getString("name"), arena);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private void registerEvents() {
@@ -44,6 +82,9 @@ public final class AdvancedHNS extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnArenaDeleteEvent(), this);
         getServer().getPluginManager().registerEvents(new OnArenaEditEvent(this), this);
         getServer().getPluginManager().registerEvents(new OnArenaSaveEvent(this), this);
+
+        getServer().getPluginManager().registerEvents(new OnArenaJoinEvent(), this);
+        getServer().getPluginManager().registerEvents(new OnArenaLeaveEvent(), this);
     }
 
     public ArenaRepository getArenaRepository() {

@@ -173,4 +173,9 @@ public class Arena {
     public ArrayList<String> getValidationErrors() {
         return this.errorMessages;
     }
+
+    public boolean isReadyToJoin() {
+        // todo: make total players counter
+        return this.status == 1;
+    }
 }

@@ -7,9 +7,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.bandamc.advancedHNS.AdvancedHNS;
+import ru.bandamc.advancedHNS.entities.Arena;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,6 +37,9 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
     private final SetLobbyPosCommandHandler setLobbyPosCommandHandler;
     private final SetSpecPosCommandHandler setSpecPosCommandHandler;
 
+    private final JoinCommandHandler joinCommandHandler;
+    private final LeaveCommandHandler leaveCommandHandler;
+
     public CommandExecutor() {
         aboutCommandHandler = new AboutCommandHandler();
         helpCommandHandler = new HelpCommandHandler();
@@ -52,6 +57,9 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
         setSeekersSpawnPosCommandHandler = new SetSeekersSpawnPosCommandHandler();
         setLobbyPosCommandHandler = new SetLobbyPosCommandHandler();
         setSpecPosCommandHandler = new SetSpecPosCommandHandler();
+
+        joinCommandHandler = new JoinCommandHandler();
+        leaveCommandHandler = new LeaveCommandHandler();
     }
 
     @Override
@@ -63,6 +71,10 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
             return helpCommandHandler.Handle(sender, command, label, args);
         } else if (args[0].equalsIgnoreCase("reload")) {
             return reloadCommandHandler.Handle(sender, command, label, args);
+        } else if (args[0].equalsIgnoreCase("join")) {
+            return joinCommandHandler.Handle(sender, command, label, args);
+        } else if (args[0].equalsIgnoreCase("leave")) {
+            return leaveCommandHandler.Handle(sender, command, label, args);
         } else if (args[0].equalsIgnoreCase("admin")) {
             if (args.length >= 2) {
                 if (args[1].equalsIgnoreCase("world")) {
@@ -125,10 +137,18 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 1 && args[0].isEmpty()) {
-            return Arrays.asList("help", "admin", "reload", "join", "leave", "start");
+            return Arrays.asList("help", "admin", "reload", "join", "leave");
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("help")) {
             return List.of();
+        }
+        if (args.length == 2 && args[0].equalsIgnoreCase("join")) {
+            AdvancedHNS plugin = JavaPlugin.getPlugin(AdvancedHNS.class);
+            ArrayList<String> availableArenas = new ArrayList<>();
+            for (Arena arena : plugin.arenas.values()) {
+                availableArenas.add(arena.getName());
+            }
+            return availableArenas;
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("admin")) {
             return Arrays.asList("world", "arena");
@@ -144,6 +164,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
         // create
         if (args.length == 4 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("arena") && (args[2].equalsIgnoreCase("edit") || args[2].equalsIgnoreCase("delete"))) {
             AdvancedHNS plugin = JavaPlugin.getPlugin(AdvancedHNS.class);
+            // todo: may rewrite it with plugin.arenas hashmap?
             ArrayList<String> arenas = new ArrayList<>();
             ResultSet allArenas;
             try {
