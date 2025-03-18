@@ -5,3 +5,6 @@ database:
   database: "hideandseek"
   user: 'user'
   password: 'password'
+
+teleport_to_spawn_on_join: true
+spawn_world: "world"
