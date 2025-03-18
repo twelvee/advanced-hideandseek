@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.bandamc.advancedHNS.AdvancedHNS;
 import ru.bandamc.advancedHNS.LocalizationManager;
+import ru.bandamc.advancedHNS.api.events.ArenaInitEvent;
 import ru.bandamc.advancedHNS.database.ArenaRepository;
 import ru.bandamc.advancedHNS.entities.Arena;
 
@@ -40,8 +41,7 @@ public class CreateArenaCommandHandler implements CommandHandler {
                         return false;
                     }
                 } catch (SQLException e) {
-                    player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.arena_already_exists").replace("{name}", arenaName));
-                    return false;
+                    throw new RuntimeException(e);
                 }
 
                 //plugin.getArenaRepository().createArena(player.getWorld().getName(), arenaName);
@@ -61,7 +61,7 @@ public class CreateArenaCommandHandler implements CommandHandler {
 
                 plugin.arenaEdits.put(player, arena);
 
-                player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.arena_create_success").replace("{name}", arenaName));
+                Bukkit.getPluginManager().callEvent(new ArenaInitEvent(player, arena));
                 return true;
 
             }
