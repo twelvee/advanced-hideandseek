@@ -14,5 +14,7 @@ public class OnArenaJoinEvent implements Listener {
         String language = event.getPlayer().getClientOption(ClientOption.LOCALE);
         if (!event.getArena().isReadyToJoin())
             event.setCancelled(true);
+
+        event.getArena().joinHiders(event.getPlayer());
     }
 }

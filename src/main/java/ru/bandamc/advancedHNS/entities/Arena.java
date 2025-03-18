@@ -2,8 +2,10 @@ package ru.bandamc.advancedHNS.entities;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Arena {
     String name;
@@ -14,6 +16,8 @@ public class Arena {
     Location lobbyPos;
     Location seekersSpawnPos;
     Location hidersSpawnPos;
+
+    HashMap<Player, Actor> players = new HashMap<>();
 
     int minSeekers;
     int minHiders;
@@ -213,7 +217,15 @@ public class Arena {
     }
 
     public boolean isReadyToJoin() {
-        // todo: make total players counter
+        // todo: validate seekers and hiders min amounts
         return this.status == 1;
+    }
+
+    public void joinHiders(Player player) {
+        this.players.put(player, new Hider(player));
+    }
+
+    public void joinSeekers(Player player) {
+        this.players.put(player, new Seeker(player));
     }
 }
