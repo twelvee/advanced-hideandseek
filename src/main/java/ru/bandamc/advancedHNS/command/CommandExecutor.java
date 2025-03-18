@@ -36,6 +36,9 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
     private final SetSeekersSpawnPosCommandHandler setSeekersSpawnPosCommandHandler;
     private final SetLobbyPosCommandHandler setLobbyPosCommandHandler;
     private final SetSpecPosCommandHandler setSpecPosCommandHandler;
+    private final SetMinHidersCommandHandler setMinHidersCommandHandler;
+    private final SetMinSeekersCommandHandler setMinSeekersCommandHandler;
+    private final SetMaxPlayersCommandHandler setMaxPlayersCommandHandler;
 
     private final JoinCommandHandler joinCommandHandler;
     private final LeaveCommandHandler leaveCommandHandler;
@@ -57,6 +60,9 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
         setSeekersSpawnPosCommandHandler = new SetSeekersSpawnPosCommandHandler();
         setLobbyPosCommandHandler = new SetLobbyPosCommandHandler();
         setSpecPosCommandHandler = new SetSpecPosCommandHandler();
+        setMinHidersCommandHandler = new SetMinHidersCommandHandler();
+        setMinSeekersCommandHandler = new SetMinSeekersCommandHandler();
+        setMaxPlayersCommandHandler = new SetMaxPlayersCommandHandler();
 
         joinCommandHandler = new JoinCommandHandler();
         leaveCommandHandler = new LeaveCommandHandler();
@@ -125,6 +131,15 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
                         if (args[2].equalsIgnoreCase("max_seekers")) {
                             return setMaxSeekersCommandHandler.Handle(sender, command, label, args);
                         }
+                        if (args[2].equalsIgnoreCase("max_players")) {
+                            return setMaxPlayersCommandHandler.Handle(sender, command, label, args);
+                        }
+                        if (args[2].equalsIgnoreCase("min_seekers")) {
+                            return setMinSeekersCommandHandler.Handle(sender, command, label, args);
+                        }
+                        if (args[2].equalsIgnoreCase("min_hiders")) {
+                            return setMinHidersCommandHandler.Handle(sender, command, label, args);
+                        }
                     }
                 }
             }
@@ -158,7 +173,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
         }
 
         if (args.length == 3 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("arena")) {
-            return Arrays.asList("create", "delete", "edit", "save", "pos1", "pos2", "spec", "lobby", "seekers_spawn", "hiders_spawn", "max_hiders", "max_seekers");
+            return Arrays.asList("create", "delete", "edit", "save", "pos1", "pos2", "spec", "lobby", "seekers_spawn", "hiders_spawn", "max_hiders", "max_seekers", "max_players", "min_hiders", "min_seekers");
         }
 
         // create
