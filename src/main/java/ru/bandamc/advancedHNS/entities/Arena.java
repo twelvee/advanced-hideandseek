@@ -228,4 +228,20 @@ public class Arena {
     public void joinSeekers(Player player) {
         this.players.put(player, new Seeker(player));
     }
+
+    public String getStatusText() {
+        switch (this.status) {
+            case 0:
+                return "Editing";
+            case 1:
+                return "Ready";
+            case 2:
+                return "Waiting for players..";
+            case 3:
+                return "In-progress";
+            case 4:
+                return "Cleaning";
+        }
+        return "Unavailable";
+    }
 }

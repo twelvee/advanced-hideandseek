@@ -24,8 +24,10 @@ public class OnArenaJoinEvent implements Listener {
 
         AdvancedHNS plugin = JavaPlugin.getPlugin(AdvancedHNS.class);
         plugin.boards.get(event.getPlayer()).updateLines(
-                Component.text("Joined arena:"),
-                Component.text(event.getArena().getName())
+                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.youre_in_arena")),
+                Component.text(event.getArena().getName()),
+                Component.text(""),
+                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status").replace("{status}", event.getArena().getStatusText()))
         );
     }
 }
