@@ -1,5 +1,7 @@
 package ru.bandamc.advancedHNS;
 
+import fr.mrmicky.fastboard.adventure.FastBoard;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.bandamc.advancedHNS.command.CommandExecutor;
@@ -13,7 +15,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 
 public final class AdvancedHNS extends JavaPlugin {
 
@@ -22,10 +26,13 @@ public final class AdvancedHNS extends JavaPlugin {
 
     private ArenaRepository arenaRepository;
 
+
     public HashMap<String, Arena> arenas = new HashMap<>();
     public HashMap<Arena, ArrayList<Player>> arenaPlayers = new HashMap<>();
     public HashMap<Player, Arena> playerArena = new HashMap<>();
     public HashMap<Player, Arena> arenaEdits = new HashMap<>();
+
+    public final Map<Player, FastBoard> boards = new HashMap<>();
 
     private Connection connection;
 

@@ -1,5 +1,6 @@
 package ru.bandamc.advancedHNS.events;
 
+import fr.mrmicky.fastboard.adventure.FastBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,6 +26,12 @@ public class OnPlayerLeftServerEvent implements Listener {
             // call arena leave event if player was on arena.
             ArenaLeaveEvent leaveEvent = new ArenaLeaveEvent(event.getPlayer(), arena);
             Bukkit.getPluginManager().callEvent(leaveEvent);
+
+            // remove scoreboards
+            FastBoard board = plugin.boards.remove(event.getPlayer());
+            if (board != null) {
+                board.delete();
+            }
         }
     }
 }
