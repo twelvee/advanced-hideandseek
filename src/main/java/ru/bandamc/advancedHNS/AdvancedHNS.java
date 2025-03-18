@@ -43,6 +43,7 @@ public final class AdvancedHNS extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnArenaInitEvent(), this);
         getServer().getPluginManager().registerEvents(new OnArenaDeleteEvent(), this);
         getServer().getPluginManager().registerEvents(new OnArenaEditEvent(), this);
+        getServer().getPluginManager().registerEvents(new OnArenaSaveEvent(this), this);
     }
 
     public ArenaRepository getArenaRepository() {
