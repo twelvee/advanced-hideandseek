@@ -56,6 +56,9 @@ public class EditArenaCommandHandler implements CommandHandler {
                         arena.setLobbyPos(resultSet.getString("lobby_pos"));
                         arena.setSeekersSpawnPos(resultSet.getString("seekers_spawn_point"));
                         arena.setHidersSpawnPos(resultSet.getString("hiders_spawn_point"));
+                        arena.setMinHiders(resultSet.getInt("min_hiders"));
+                        arena.setMinSeekers(resultSet.getInt("min_seekers"));
+                        arena.setMaxPlayers(resultSet.getInt("max_players"));
                         arena.setStatus(0);
                     } else {
                         player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.arena_edit_start_failed").replace("{name}", arenaName));

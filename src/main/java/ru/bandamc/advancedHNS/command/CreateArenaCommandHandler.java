@@ -58,6 +58,9 @@ public class CreateArenaCommandHandler implements CommandHandler {
                 arena.setSpecPos(player.getWorld().getName() + "|0|0|0");
                 arena.setHidersSpawnPos(player.getWorld().getName() + "|0|0|0");
                 arena.setSeekersSpawnPos(player.getWorld().getName() + "|0|0|0");
+                arena.setMinHiders(1);
+                arena.setMinSeekers(1);
+                arena.setMaxPlayers(24);
 
                 ArenaInitEvent event = new ArenaInitEvent(player, arena);
                 Bukkit.getPluginManager().callEvent(event);

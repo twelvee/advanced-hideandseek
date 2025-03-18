@@ -14,6 +14,11 @@ public class Arena {
     Location lobbyPos;
     Location seekersSpawnPos;
     Location hidersSpawnPos;
+
+    int minSeekers;
+    int minHiders;
+    int maxPlayers;
+
     int maxSeekers;
     int maxHiders;
     int status;
@@ -137,6 +142,30 @@ public class Arena {
         return this.status;
     }
 
+    public void setMinSeekers(int num) {
+        this.minSeekers = num;
+    }
+
+    public int getMinSeekers() {
+        return this.minSeekers;
+    }
+
+    public void setMinHiders(int num) {
+        this.minHiders = num;
+    }
+
+    public int getMinHiders() {
+        return this.minHiders;
+    }
+
+    public void setMaxPlayers(int num) {
+        this.maxPlayers = num;
+    }
+
+    public int getMaxPlayers() {
+        return this.maxPlayers;
+    }
+
     // true if everything aight
     // false if not
     public boolean validateToStore() {
@@ -165,6 +194,15 @@ public class Arena {
         }
         if (this.maxSeekers <= 0) {
             this.errorMessages.add("Max seekers must be 1 and more.");
+        }
+        if (this.minSeekers <= 0) {
+            this.errorMessages.add("Min seekers must be 1 and more.");
+        }
+        if (this.minHiders <= 0) {
+            this.errorMessages.add("Min hiders must be 1 and more.");
+        }
+        if (this.maxPlayers < 2) {
+            this.errorMessages.add("Max players must be 2 and more.");
         }
 
         return this.errorMessages.isEmpty();

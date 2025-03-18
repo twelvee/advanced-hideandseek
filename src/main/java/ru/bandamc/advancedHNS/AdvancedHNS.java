@@ -65,6 +65,9 @@ public final class AdvancedHNS extends JavaPlugin {
                 arena.setLobbyPos(allArenas.getString("lobby_pos"));
                 arena.setSeekersSpawnPos(allArenas.getString("seekers_spawn_point"));
                 arena.setHidersSpawnPos(allArenas.getString("hiders_spawn_point"));
+                arena.setMinHiders(allArenas.getInt("min_hiders"));
+                arena.setMinSeekers(allArenas.getInt("min_seekers"));
+                arena.setMaxPlayers(allArenas.getInt("max_players"));
                 arena.setStatus(allArenas.getInt("status"));
                 arenas.put(allArenas.getString("name"), arena);
             } catch (SQLException e) {
