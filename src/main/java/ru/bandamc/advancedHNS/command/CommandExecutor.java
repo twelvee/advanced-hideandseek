@@ -20,6 +20,7 @@ import java.util.List;
 public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabCompleter {
     private final AboutCommandHandler aboutCommandHandler;
     private final HelpCommandHandler helpCommandHandler;
+    private final ReloadCommandHandler reloadCommandHandler;
     private final ChangeWorldCommandHandler worldTpCommandHandler;
     private final CreateArenaCommandHandler createArenaCommandHandler;
     private final DeleteArenaCommandHandler deleteArenaCommandHandler;
@@ -37,6 +38,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
     public CommandExecutor() {
         aboutCommandHandler = new AboutCommandHandler();
         helpCommandHandler = new HelpCommandHandler();
+        reloadCommandHandler = new ReloadCommandHandler();
         worldTpCommandHandler = new ChangeWorldCommandHandler();
         createArenaCommandHandler = new CreateArenaCommandHandler();
         deleteArenaCommandHandler = new DeleteArenaCommandHandler();
@@ -59,6 +61,8 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
         }
         if (args[0].equalsIgnoreCase("help")) {
             return helpCommandHandler.Handle(sender, command, label, args);
+        } else if (args[0].equalsIgnoreCase("reload")) {
+            return reloadCommandHandler.Handle(sender, command, label, args);
         } else if (args[0].equalsIgnoreCase("admin")) {
             if (args.length >= 2) {
                 if (args[1].equalsIgnoreCase("world")) {
@@ -125,7 +129,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 1 && args[0].isEmpty()) {
-            return Arrays.asList("help", "admin");
+            return Arrays.asList("help", "admin", "reload");
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("help")) {
             return List.of();
@@ -142,7 +146,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
         }
 
         // create
-        if (args.length == 4 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("arena") && (args[2].equalsIgnoreCase("edit") || args[2].equalsIgnoreCase("save") || args[2].equalsIgnoreCase("delete"))) {
+        if (args.length == 4 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("arena") && (args[2].equalsIgnoreCase("edit") || args[2].equalsIgnoreCase("delete"))) {
             AdvancedHNS plugin = JavaPlugin.getPlugin(AdvancedHNS.class);
             ArrayList<String> arenas = new ArrayList<>();
             ResultSet allArenas;
@@ -151,7 +155,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
             } catch (SQLException e) {
                 return List.of();
             }
-            while(true) {
+            while (true) {
                 try {
                     if (!allArenas.next()) break;
                     arenas.add(allArenas.getString("name"));

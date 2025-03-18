@@ -11,12 +11,14 @@ public class HelpCommandHandler implements CommandHandler {
     String[] chatMessages = {
             AdvancedHNS.HNS_CHAT_PREFIX + " Available commands:",
             "§7/hns help - shows available commands",
+            "§7/hns reload - reload configuration files",
             "§7/hns admin help - shows information about how you setup arenas.",
     };
 
     String[] consoleMessages = {
             AdvancedHNS.HNS_PREFIX + " Available commands:",
             "hns help - shows available commands",
+            "hns reload - reload configuration files",
             "hns admin help - shows information about how you setup arenas.",
     };
 
