@@ -16,7 +16,7 @@ import java.sql.SQLException;
 
 public class EditArenaCommandHandler implements CommandHandler {
     @Override
-    public boolean Handle(CommandSender sender, Command command, String label, String[] args) throws SQLException {
+    public boolean Handle(CommandSender sender, Command command, String label, String[] args) {
         if (args.length < 4) {
             // arena name not specified.
             return false;
@@ -43,7 +43,6 @@ public class EditArenaCommandHandler implements CommandHandler {
                 }
 
                 try {
-                    plugin.getArenaRepository().changeArenaStatus(arenaName, 0);
                     Arena arena = new Arena();
 
                     if (resultSet.next()) {
@@ -73,8 +72,7 @@ public class EditArenaCommandHandler implements CommandHandler {
                 } catch (SQLException e) {
                     player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".admin.arena_edit_start_failed").replace("{name}", arenaName));
                     Bukkit.getLogger().info(e.getMessage());
-                    throw e;
-
+                    throw new RuntimeException(e);
                 }
             }
         }

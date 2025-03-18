@@ -84,11 +84,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
                             return deleteArenaCommandHandler.Handle(sender, command, label, args);
                         }
                         if (args[2].equalsIgnoreCase("edit")) {
-                            try {
-                                return editArenaCommandHandler.Handle(sender, command, label, args);
-                            } catch (SQLException e) {
-                                throw new RuntimeException(e);
-                            }
+                            return editArenaCommandHandler.Handle(sender, command, label, args);
                         }
                         if (args[2].equalsIgnoreCase("save")) {
                             return saveArenaCommandHandler.Handle(sender, command, label, args);
@@ -129,7 +125,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 1 && args[0].isEmpty()) {
-            return Arrays.asList("help", "admin", "reload");
+            return Arrays.asList("help", "admin", "reload", "join", "leave", "start");
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("help")) {
             return List.of();
