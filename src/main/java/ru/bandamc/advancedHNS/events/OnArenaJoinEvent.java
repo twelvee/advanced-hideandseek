@@ -20,6 +20,9 @@ public class OnArenaJoinEvent implements Listener {
         if (!event.getArena().isReadyToJoin())
             event.setCancelled(true);
 
+        if(event.getArena().getPlayers().isEmpty()) {
+            event.getArena().setStatus(2); // set "Waiting for players status"
+        }
         event.getArena().joinHiders(event.getPlayer());
 
         AdvancedHNS plugin = JavaPlugin.getPlugin(AdvancedHNS.class);
@@ -27,7 +30,9 @@ public class OnArenaJoinEvent implements Listener {
                 Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.youre_in_arena")),
                 Component.text(event.getArena().getName()),
                 Component.text(""),
-                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status").replace("{status}", event.getArena().getStatusText()))
+                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status").replace("{status}", LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status_"+event.getArena().getStatus()))),
+                Component.text(""),
+                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.footer"))
         );
     }
 }

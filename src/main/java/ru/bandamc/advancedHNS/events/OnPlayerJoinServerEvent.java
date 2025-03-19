@@ -1,5 +1,6 @@
 package ru.bandamc.advancedHNS.events;
 
+import com.destroystokyo.paper.ClientOption;
 import fr.mrmicky.fastboard.adventure.FastBoard;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -8,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.bandamc.advancedHNS.AdvancedHNS;
+import ru.bandamc.advancedHNS.LocalizationManager;
 
 public class OnPlayerJoinServerEvent implements Listener {
     @EventHandler
@@ -18,8 +20,8 @@ public class OnPlayerJoinServerEvent implements Listener {
             event.getPlayer().teleport(Bukkit.getWorld(plugin.getConfig().getString("spawn_world", "world")).getSpawnLocation());
 
         FastBoard board = new FastBoard(event.getPlayer());
-
-        board.updateTitle(Component.text("FastBoard"));
+        String language = event.getPlayer().getClientOption(ClientOption.LOCALE);
+        board.updateTitle(Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.header")));
 
         plugin.boards.put(event.getPlayer(), board);
     }

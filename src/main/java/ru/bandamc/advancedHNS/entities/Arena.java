@@ -229,6 +229,10 @@ public class Arena {
         this.players.put(player, new Seeker(player));
     }
 
+    public HashMap<Player, Actor> getPlayers() {
+        return this.players;
+    }
+
     public String getStatusText() {
         switch (this.status) {
             case 0:

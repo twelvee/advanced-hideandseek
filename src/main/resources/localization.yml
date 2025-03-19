@@ -1,4 +1,17 @@
 ru:
+  scoreboard:
+    youre_in_arena: "Вы на арене"
+    hider: "§aПрячущийся"
+    seeker: "§4Охотник"
+    before_game: "До начала игры {time} сек."
+    status: "Статус: {status}"
+    status_0: "§4Не доступна"
+    status_1: "§6Активна"
+    status_2: "§6Ожидание игроков"
+    status_3: "§9Идёт игра"
+    status_4: "§4Перезапускается"
+    header: "§b§lПРЯТКИ"
+    footer: "Сайт: bandamc.ru"
   general:
     join_arena: "Вы успешно вошли на арену {name}."
     join_arena_failed: "Не получилось перейти на арену."
@@ -31,8 +44,27 @@ ru:
     arena_max_seekers_set: "Максимальное количество охотников установлено на {number} для арены {name}."
     arena_error_max_hiders_less_than_zero: "Максимальное количество прячущихся не может быть меньше 1."
     arena_max_hiders_set: "Максимальное количество прячущихся установлено на {number} для арены {name}."
+    arena_error_min_hiders_less_than_one: "Минимальное количество прячущихся не может быть меньше 1."
+    arena_min_hiders_set: "Минимальное количество прячущихся установлено на {number} для арены {name}."
+    arena_error_min_seekers_less_than_one: "Минимальное количество охотников не может быть меньше 1."
+    arena_min_seekers_set: "Минимальное количество охотников установлено на {number} для арены {name}."
+    arena_error_maxplayers_less_than_two: "Максимальное количество игроков не может быть меньше 2."
+    arena_maxplayers_set: "Максимальное количество игроков установлено на {number} для арены {name}."
 
 en:
+  scoreboard:
+    youre_in_arena: "You're at the arena:"
+    hider: "§aHider"
+    seeker: "§4Seeker"
+    before_game: "Game starts in {time}s"
+    status: "Status: {status}"
+    status_0: "§4Not available"
+    status_1: "§6Active"
+    status_2: "§6Waiting for players"
+    status_3: "§9In-progress"
+    status_4: "§4Restarting"
+    header: "§b§lHIDE AND SEEK"
+    footer: "Website: bandamc.ru"
   general:
     join_arena: "You're successfully joined {name}."
     join_arena_failed: "Failed to join the arena."
@@ -65,5 +97,11 @@ en:
     arena_max_seekers_set: "Maximum amount of seekers set to {number} for arena {name}."
     arena_error_max_hiders_less_than_zero: "Maximum amount of hiders must be greather than 1."
     arena_max_hiders_set: "Maximum amount of hiders set to {number} for arena {name}."
+    arena_error_min_hiders_less_than_one: "Minimum amount of hiders must be greater than 1."
+    arena_min_hiders_set: "Minimum amount of hiders set to {number} for arena {name}."
+    arena_error_min_seekers_less_than_one: "Minimum amount of seekers must be greater than 1."
+    arena_min_seekers_set: "Minimum amount of seekers set to {number} for arena {name}."
+    arena_error_maxplayers_less_than_two: "Maxplayers must be greather or equal 2."
+    arena_maxplayers_set: "Maximum of players set to {number} for arena {name}."
 
 fallback_locale: "en"

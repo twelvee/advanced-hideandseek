@@ -13,6 +13,10 @@ public class OnArenaLeaveEvent implements Listener {
     public void onArenaLeave(ArenaLeaveEvent event) {
         String language = event.getPlayer().getClientOption(ClientOption.LOCALE);
         AdvancedHNS plugin = JavaPlugin.getPlugin(AdvancedHNS.class);
+        event.getArena().getPlayers().remove(event.getPlayer());
+        if(event.getArena().getPlayers().isEmpty()) {
+            event.getArena().setStatus(1); // set "Ready"
+        }
         plugin.boards.get(event.getPlayer()).updateLines();
     }
 }

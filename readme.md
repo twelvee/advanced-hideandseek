@@ -12,10 +12,11 @@ Supports paper 1.20+. requires java 17+.
 - [ ] Select seekers / hiders (WIP)
 - [ ] Select prop
 - [ ] Players statistics (+holograms/placeholder API?)
-- [ ] Scoreboards (WIP)
+- [X] Scoreboards
 - [ ] Chest menus
 - [ ] Set available props for arena
 - [ ] Arena timers (main gameplay loop, seekers blind timer)
 - [ ] Rewards
 - [ ] Join/leave signs
-- [ ] Localized arena statuses
+- [X] Localized arena statuses
+- [ ] Use players metadata
