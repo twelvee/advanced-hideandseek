@@ -46,6 +46,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
     private final SelectHiderCommandHandler selectHiderCommandHandler;
     private final SelectSeekerCommandHandler selectSeekerCommandHandler;
     private final SelectTeamGUICommandHandler selectTeamGUICommandHandler;
+    private final SelectBlockGUICommandHandler selectBlockGUICommandHandler;
 
     public CommandExecutor() {
         aboutCommandHandler = new AboutCommandHandler();
@@ -74,6 +75,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
         selectHiderCommandHandler = new SelectHiderCommandHandler();
         selectSeekerCommandHandler = new SelectSeekerCommandHandler();
         selectTeamGUICommandHandler = new SelectTeamGUICommandHandler();
+        selectBlockGUICommandHandler = new SelectBlockGUICommandHandler();
     }
 
     @Override
@@ -93,6 +95,8 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
             return selectHiderCommandHandler.Handle(sender, command, label, args);
         } else if (args[0].equalsIgnoreCase("select_team_gui")) {
             return selectTeamGUICommandHandler.Handle(sender, command, label, args);
+        }else if (args[0].equalsIgnoreCase("select_block_gui")) {
+            return selectBlockGUICommandHandler.Handle(sender, command, label, args);
         } else if (args[0].equalsIgnoreCase("select_seeker")) {
             return selectSeekerCommandHandler.Handle(sender, command, label, args);
         } else if (args[0].equalsIgnoreCase("admin")) {

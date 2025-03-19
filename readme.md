@@ -10,10 +10,10 @@ Supports paper 1.20+. requires java 17+.
 - [X] Arena start game
 - [ ] Arena finish game
 - [X] Select seekers / hiders
-- [ ] Select prop
+- [X] Select prop
 - [ ] Players statistics (+holograms/placeholder API?)
 - [X] Scoreboards
-- [ ] Chest menus WIP
+- [X] Chest menus
 - [ ] Set available props for arena WIP
 - [ ] Arena timers (main gameplay loop) WIP
 - [ ] Rewards
@@ -21,6 +21,3 @@ Supports paper 1.20+. requires java 17+.
 - [X] Bossbars
 - [X] Localized arena statuses
 - [X] Use players metadata (used for tracking if player is in arena or not)
-
-
-## todo

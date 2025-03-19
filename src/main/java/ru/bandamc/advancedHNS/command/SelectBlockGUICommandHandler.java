@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -14,10 +15,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.bandamc.advancedHNS.AdvancedHNS;
 import ru.bandamc.advancedHNS.LocalizationManager;
-import ru.bandamc.advancedHNS.api.events.ArenaStartEvent;
 import ru.bandamc.advancedHNS.entities.Arena;
 
-public class SelectTeamGUICommandHandler implements CommandHandler {
+public class SelectBlockGUICommandHandler implements CommandHandler {
 
     @Override
     public boolean Handle(CommandSender sender, Command command, String label, String[] args) {
@@ -29,28 +29,34 @@ public class SelectTeamGUICommandHandler implements CommandHandler {
                 player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".general.not_in_arena"));
                 return true;
             }
-            if (arena.getStatus() != 1 && arena.getStatus() != 2) {
-                player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".general.change_team_error"));
+            if (arena.getStatus() != 3) {
+                player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".general.select_block_error"));
+                return true;
+            }
+            boolean found = false;
+            for(var hider : arena.getHiders()) {
+                if (hider.getPlayer() == player) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".general.select_block_error"));
                 return true;
             }
 
-            Inventory menu = Bukkit.createInventory(player, 9, Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".menus.select_team_menu")));
+            Inventory menu = Bukkit.createInventory(player, 2*9, Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".menus.select_block_menu")));
             // Add items to the menu
-            ItemStack seekerTeam = new ItemStack(Material.IRON_SWORD);
-            ItemMeta seekerMeta = seekerTeam.getItemMeta();
-            seekerMeta.displayName(Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.seeker")));
-            seekerTeam.setItemMeta(seekerMeta);
-            menu.setItem(3, seekerTeam);
 
-            ItemStack hiderTeam = new ItemStack(Material.BOOK);
-            ItemMeta hiderMeta = seekerTeam.getItemMeta();
-            hiderMeta.displayName(Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.hider")));
-            hiderTeam.setItemMeta(hiderMeta);
-            menu.setItem(5, hiderTeam);
+            for (var block : arena.getAvailableBlocks()) {
+                ItemStack is = new ItemStack(block);
+                menu.addItem(is);
+            }
 
             player.openInventory(menu);
             player.setMetadata("HNSOpenedInventory", new FixedMetadataValue(plugin, menu));
-            player.setMetadata("HNSOpenedInventoryName", new FixedMetadataValue(plugin, "_select_team_gui_"));
+            player.setMetadata("HNSOpenedInventoryName", new FixedMetadataValue(plugin, "_select_block_gui_"));
             return true;
         }
 

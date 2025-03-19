@@ -77,6 +77,7 @@ public final class AdvancedHNS extends JavaPlugin {
                 arena.setMinHiders(allArenas.getInt("min_hiders"));
                 arena.setMinSeekers(allArenas.getInt("min_seekers"));
                 arena.setMaxPlayers(allArenas.getInt("max_players"));
+                arena.setAvailableBlocks(allArenas.getString("available_props"));
                 arena.setStatus(allArenas.getInt("status"));
                 arenas.put(allArenas.getString("name"), arena);
             } catch (SQLException e) {
@@ -106,6 +107,7 @@ public final class AdvancedHNS extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnPlayerChangeWorldEvent(), this);
         getServer().getPluginManager().registerEvents(new OnPlayerGUIEvents(), this);
         getServer().getPluginManager().registerEvents(new OnPlayerTakeDamageEvent(), this);
+        getServer().getPluginManager().registerEvents(new OnHiderSelectBlockEvent(), this);
     }
 
     public ArenaRepository getArenaRepository() {

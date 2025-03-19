@@ -1,6 +1,10 @@
 package ru.bandamc.advancedHNS.events;
 
 import com.destroystokyo.paper.ClientOption;
+import me.libraryaddict.disguise.DisguiseAPI;
+import me.libraryaddict.disguise.disguisetypes.DisguiseType;
+import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
+import org.bukkit.Material;
 import org.bukkit.boss.BossBar;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,7 +33,11 @@ public class OnArenaLeaveEvent implements Listener {
             activeBossBar.removePlayer(event.getPlayer());
             activeBossBar.removeAll();
         }
-
+        if (event.getPlayer().hasMetadata("currentBlock")) {
+            //Material material = (Material) event.getPlayer().getMetadata("currentBlock").get(0).value();
+            DisguiseAPI.undisguiseToAll(event.getPlayer());
+            event.getPlayer().removeMetadata("currentBlock", plugin);
+        }
         event.getPlayer().setFlySpeed(0.2f);
         event.getPlayer().setWalkSpeed(0.2f);
         event.getPlayer().removePotionEffect(PotionEffectType.SPEED);

@@ -61,6 +61,7 @@ public class CreateArenaCommandHandler implements CommandHandler {
                 arena.setMinHiders(1);
                 arena.setMinSeekers(1);
                 arena.setMaxPlayers(24);
+                arena.setAvailableBlocks("GRASS_BLOCK,COBBLESTONE,STONE");
 
                 ArenaInitEvent event = new ArenaInitEvent(player, arena);
                 Bukkit.getPluginManager().callEvent(event);

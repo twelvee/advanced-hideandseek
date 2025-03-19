@@ -5,6 +5,8 @@ import net.kyori.adventure.bossbar.BossBarImplementation;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -31,6 +33,8 @@ public class Arena {
     Location seekersSpawnPos;
     Location hidersSpawnPos;
 
+    ArrayList<Material> availableBlocks = new ArrayList<>();
+
     HashMap<Player, Actor> players = new HashMap<>();
 
     int minSeekers;
@@ -50,6 +54,22 @@ public class Arena {
 
     public String getName() {
         return this.name;
+    }
+
+    public void setAvailableBlocks(ArrayList<Material> blocks) {
+        this.availableBlocks = blocks;
+    }
+
+    public void setAvailableBlocks(String blocks) {
+        var b = blocks.split(",");
+        for (var bl : b) {
+            Material material = Material.valueOf(bl);
+            this.availableBlocks.add(material);
+        }
+    }
+
+    public ArrayList<Material> getAvailableBlocks() {
+        return this.availableBlocks;
     }
 
     public void setWorld(String world) {
@@ -330,7 +350,7 @@ public class Arena {
                 player.getPlayer().teleport(this.getSeekersSpawnPos());
                 // blind seeker
                 // todo: timer to reset effect
-                player.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 61*20, 0, false,
+                player.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 61 * 20, 0, false,
                         false));
                 player.getPlayer().setWalkSpeed(0);
                 player.getPlayer().setFlySpeed(0);
@@ -357,7 +377,7 @@ public class Arena {
 
             if (player instanceof Hider) {
                 player.getPlayer().teleport(this.getHidersSpawnPos());
-                player.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60*20, 0, false, true));
+                player.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60 * 20, 0, false, true));
                 BossBar hidersStartBossBar = Bukkit.createBossBar(
                         LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".bossbars.hiders_start").replace("{time}", "60"),
                         BarColor.GREEN,
