@@ -33,7 +33,6 @@ public class OnPlayerTakeDamageEvent implements Listener {
                             || event.getCause() == EntityDamageEvent.DamageCause.CONTACT
                             || event.getCause() == EntityDamageEvent.DamageCause.CRAMMING
                             || event.getCause() == EntityDamageEvent.DamageCause.DRYOUT
-                            || event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK
                             || event.getCause() == EntityDamageEvent.DamageCause.VOID
                             || event.getCause() == EntityDamageEvent.DamageCause.DRAGON_BREATH
                             || event.getCause() == EntityDamageEvent.DamageCause.FALLING_BLOCK
