@@ -16,7 +16,6 @@ import static org.bukkit.Bukkit.getServer;
 public class OnArenaJoinEvent implements Listener {
     @EventHandler
     public void onArenaJoin(ArenaJoinEvent event) {
-        String language = event.getPlayer().getClientOption(ClientOption.LOCALE);
         if (!event.getArena().isReadyToJoin())
             event.setCancelled(true);
 
@@ -24,15 +23,5 @@ public class OnArenaJoinEvent implements Listener {
             event.getArena().setStatus(2); // set "Waiting for players status"
         }
         event.getArena().joinHiders(event.getPlayer());
-
-        AdvancedHNS plugin = JavaPlugin.getPlugin(AdvancedHNS.class);
-        plugin.boards.get(event.getPlayer()).updateLines(
-                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.youre_in_arena")),
-                Component.text(event.getArena().getName()),
-                Component.text(""),
-                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status").replace("{status}", LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status_"+event.getArena().getStatus()))),
-                Component.text(""),
-                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.footer"))
-        );
     }
 }

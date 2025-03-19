@@ -9,11 +9,11 @@ Supports paper 1.20+. requires java 17+.
 - [X] Arena join/leave
 - [ ] Arena start game (WIP)
 - [ ] Arena finish game
-- [ ] Select seekers / hiders (WIP)
+- [X] Select seekers / hiders
 - [ ] Select prop
 - [ ] Players statistics (+holograms/placeholder API?)
 - [X] Scoreboards
-- [ ] Chest menus
+- [ ] Chest menus WIP
 - [ ] Set available props for arena
 - [ ] Arena timers (main gameplay loop, seekers blind timer)
 - [ ] Rewards

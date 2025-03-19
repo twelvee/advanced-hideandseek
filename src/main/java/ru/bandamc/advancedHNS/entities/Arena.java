@@ -1,11 +1,18 @@
 package ru.bandamc.advancedHNS.entities;
 
+import com.destroystokyo.paper.ClientOption;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+import ru.bandamc.advancedHNS.AdvancedHNS;
+import ru.bandamc.advancedHNS.LocalizationManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Arena {
     String name;
@@ -223,10 +230,34 @@ public class Arena {
 
     public void joinHiders(Player player) {
         this.players.put(player, new Hider(player));
+        AdvancedHNS plugin = JavaPlugin.getPlugin(AdvancedHNS.class);
+        String language = player.getClientOption(ClientOption.LOCALE);
+        plugin.boards.get(player).updateLines(
+                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.youre_in_arena")),
+                Component.text(name),
+                Component.text(""),
+                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status").replace("{status}", LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status_"+status))),
+                Component.text(""),
+                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.hider")),
+                Component.text(""),
+                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.footer"))
+        );
     }
 
     public void joinSeekers(Player player) {
         this.players.put(player, new Seeker(player));
+        AdvancedHNS plugin = JavaPlugin.getPlugin(AdvancedHNS.class);
+        String language = player.getClientOption(ClientOption.LOCALE);
+        plugin.boards.get(player).updateLines(
+                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.youre_in_arena")),
+                Component.text(name),
+                Component.text(""),
+                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status").replace("{status}", LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status_"+status))),
+                Component.text(""),
+                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.seeker")),
+                Component.text(""),
+                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.footer"))
+        );
     }
 
     public HashMap<Player, Actor> getPlayers() {
@@ -247,5 +278,23 @@ public class Arena {
                 return "Cleaning";
         }
         return "Unavailable";
+    }
+
+    public ArrayList<Hider> getHiders() {
+        ArrayList<Hider> hiders = new ArrayList<>();
+        for(var actor : this.players.values()) {
+            if (actor instanceof Hider)
+                hiders.add((Hider)actor);
+        }
+        return hiders;
+    }
+
+    public ArrayList<Hider> getSeekers() {
+        ArrayList<Hider> hiders = new ArrayList<>();
+        for(var actor : this.players.values()) {
+            if (actor instanceof Hider)
+                hiders.add((Hider)actor);
+        }
+        return hiders;
     }
 }

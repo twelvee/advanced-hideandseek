@@ -19,6 +19,10 @@ ru:
     not_in_arena: "Вы не играете ни на какой арене."
     left_arena: "Вы успешно вышли из арены."
     left_arena_failed: "Не получилось выйти из арены."
+    max_amount_of_hiders_reached: "Не получилось, слишком много прячущихся."
+    max_amount_of_seekers_reached: "Не получилось, слишком много охотников."
+    join_hider: "Успешно зашли в команду прячущихся."
+    join_seeker: "Успешно зашли в команду охотников."
   admin:
     teleported_to_world: "Успешно телепортирован в мир {world}"
     arena_create_success: "Арена {name} успешно создана."
@@ -72,6 +76,10 @@ en:
     not_in_arena: "You're not playing on any arena."
     left_arena: "You successfully left arena."
     left_arena_failed: "Failed to left the arena."
+    max_amount_of_hiders_reached: "Failed, too much hiders."
+    max_amount_of_seekers_reached: "Failed, too much seekers."
+    join_hider: "Joined hiders team."
+    join_seeker: "Joined seekers team."
   admin:
     teleported_to_world: "Successfully teleported to {world}"
     arena_create_success: "Arena {name} was successfully created."

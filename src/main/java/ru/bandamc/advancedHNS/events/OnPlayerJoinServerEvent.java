@@ -22,7 +22,17 @@ public class OnPlayerJoinServerEvent implements Listener {
         FastBoard board = new FastBoard(event.getPlayer());
         String language = event.getPlayer().getClientOption(ClientOption.LOCALE);
         board.updateTitle(Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.header")));
-
+/*        board.updateLines(
+                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.youre_in_arena")),
+                Component.text(name),
+                Component.text(""),
+                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status").replace("{status}", LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status_"+status))),
+                Component.text(""),
+                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.hider")),
+                Component.text(""),
+                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.footer"))
+        );*/
+        
         plugin.boards.put(event.getPlayer(), board);
     }
 }

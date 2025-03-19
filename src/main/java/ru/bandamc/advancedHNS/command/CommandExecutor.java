@@ -42,6 +42,8 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
 
     private final JoinCommandHandler joinCommandHandler;
     private final LeaveCommandHandler leaveCommandHandler;
+    private final SelectHiderCommandHandler selectHiderCommandHandler;
+    private final SelectSeekerCommandHandler selectSeekerCommandHandler;
 
     public CommandExecutor() {
         aboutCommandHandler = new AboutCommandHandler();
@@ -66,6 +68,8 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
 
         joinCommandHandler = new JoinCommandHandler();
         leaveCommandHandler = new LeaveCommandHandler();
+        selectHiderCommandHandler = new SelectHiderCommandHandler();
+        selectSeekerCommandHandler = new SelectSeekerCommandHandler();
     }
 
     @Override
@@ -81,6 +85,10 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
             return joinCommandHandler.Handle(sender, command, label, args);
         } else if (args[0].equalsIgnoreCase("leave")) {
             return leaveCommandHandler.Handle(sender, command, label, args);
+        } else if (args[0].equalsIgnoreCase("select_hider")) {
+            return selectHiderCommandHandler.Handle(sender, command, label, args);
+        } else if (args[0].equalsIgnoreCase("select_seeker")) {
+            return selectSeekerCommandHandler.Handle(sender, command, label, args);
         } else if (args[0].equalsIgnoreCase("admin")) {
             if (args.length >= 2) {
                 if (args[1].equalsIgnoreCase("world")) {
@@ -152,7 +160,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 1 && args[0].isEmpty()) {
-            return Arrays.asList("help", "admin", "reload", "join", "leave");
+            return Arrays.asList("help", "admin", "reload", "join", "leave", "select_hider", "select_hider");
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("help")) {
             return List.of();
