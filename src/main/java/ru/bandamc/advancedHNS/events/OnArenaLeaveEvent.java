@@ -19,6 +19,6 @@ public class OnArenaLeaveEvent implements Listener {
             event.getArena().setStatus(1); // set "Ready"
         }
         plugin.boards.get(event.getPlayer()).updateLines();
-        event.getPlayer().setMetadata("in_arena", new FixedMetadataValue(JavaPlugin.getPlugin(AdvancedHNS.class), false));
+        event.getPlayer().removeMetadata("currentArena", plugin);
     }
 }

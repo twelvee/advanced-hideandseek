@@ -4,15 +4,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.bandamc.advancedHNS.AdvancedHNS;
 
-public class OnPlayerBreakBlockEvent implements Listener {
+public class OnPlayerPlaceBlockEvent implements Listener {
     @EventHandler
-    public void onBlockBreak(BlockBreakEvent event) {
+    public void onPlaceBlock(BlockPlaceEvent event) {
         AdvancedHNS plugin = JavaPlugin.getPlugin(AdvancedHNS.class);
-        if (!plugin.getConfig().getBoolean("allow_breaking_blocks_outside_arena")) {
+        if (!plugin.getConfig().getBoolean("allow_placing_blocks_outside_arena")) {
             event.setCancelled(true);
+            return;
         }
 
         if (event.getPlayer().hasMetadata("currentArena")) {

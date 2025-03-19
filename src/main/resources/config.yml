@@ -8,3 +8,6 @@ database:
 
 teleport_to_spawn_on_join: true
 spawn_world: "world"
+
+allow_breaking_blocks_outside_arena: true
+allow_placing_blocks_outside_arena: true

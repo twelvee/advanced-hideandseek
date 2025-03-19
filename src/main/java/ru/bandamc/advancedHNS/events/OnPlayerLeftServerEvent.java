@@ -23,7 +23,7 @@ public class OnPlayerLeftServerEvent implements Listener {
                 plugin.arenaPlayers.get(arena).remove(event.getPlayer());
             }
             plugin.playerArena.remove(event.getPlayer());
-            event.getPlayer().setMetadata("in_arena", new FixedMetadataValue(JavaPlugin.getPlugin(AdvancedHNS.class), false));
+            event.getPlayer().removeMetadata("currentArena", plugin);
             // call arena leave event if player was on arena.
             ArenaLeaveEvent leaveEvent = new ArenaLeaveEvent(event.getPlayer(), arena);
             Bukkit.getPluginManager().callEvent(leaveEvent);

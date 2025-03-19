@@ -26,6 +26,6 @@ public class OnArenaJoinEvent implements Listener {
             event.getArena().setStatus(2); // set "Waiting for players status"
         }
         event.getArena().joinHiders(event.getPlayer());
-        event.getPlayer().setMetadata("in_arena", new FixedMetadataValue(JavaPlugin.getPlugin(AdvancedHNS.class), true));
+        event.getPlayer().setMetadata("currentArena", new FixedMetadataValue(JavaPlugin.getPlugin(AdvancedHNS.class), event.getArena()));
     }
 }

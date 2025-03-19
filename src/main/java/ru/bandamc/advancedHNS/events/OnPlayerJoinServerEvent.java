@@ -19,7 +19,9 @@ public class OnPlayerJoinServerEvent implements Listener {
         // teleport players to spawn on every join.
         if (plugin.getConfig().getBoolean("teleport_to_spawn_on_join"))
             event.getPlayer().teleport(Bukkit.getWorld(plugin.getConfig().getString("spawn_world", "world")).getSpawnLocation());
-        event.getPlayer().setMetadata("in_arena", new FixedMetadataValue(JavaPlugin.getPlugin(AdvancedHNS.class), false));
+
+        event.getPlayer().removeMetadata("currentArena", plugin);
+
         FastBoard board = new FastBoard(event.getPlayer());
         String language = event.getPlayer().getClientOption(ClientOption.LOCALE);
         board.updateTitle(Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.header")));
