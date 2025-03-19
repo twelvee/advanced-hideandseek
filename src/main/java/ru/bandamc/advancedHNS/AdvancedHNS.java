@@ -3,6 +3,8 @@ package ru.bandamc.advancedHNS;
 import com.destroystokyo.paper.ClientOption;
 import fr.mrmicky.fastboard.adventure.FastBoard;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -108,6 +110,7 @@ public final class AdvancedHNS extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnPlayerGUIEvents(), this);
         getServer().getPluginManager().registerEvents(new OnPlayerTakeDamageEvent(), this);
         getServer().getPluginManager().registerEvents(new OnHiderSelectBlockEvent(), this);
+        getServer().getPluginManager().registerEvents(new OnPlayerMoveEvent(), this);
     }
 
     public ArenaRepository getArenaRepository() {
@@ -121,6 +124,15 @@ public final class AdvancedHNS extends JavaPlugin {
                 connection.close();
             } catch (SQLException e) {
                 getLogger().severe(HNS_PREFIX + " Failed to close database connection. Error: " + e.getMessage());
+            }
+        }
+
+        // clean up arenas
+        for (var arena : this.arenas.values()) {
+            for (Block d : arena.spawnedBlocks.values()) {
+                if (d != null) {
+                    Bukkit.getWorld(arena.getWorld()).setBlockData(d.getLocation(), Material.AIR.createBlockData());
+                }
             }
         }
     }

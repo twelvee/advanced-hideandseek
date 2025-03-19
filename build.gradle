@@ -19,11 +19,15 @@ repositories {
     flatDir {
         dirs 'libs'
     }
+    maven {
+        url "https://repo.extendedclip.com/content/repositories/placeholder/"
+    }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20-R0.1-SNAPSHOT")
     compileOnly files('libs/LibsDisguises-11.0.3-Free.jar')
+    compileOnly files('libs/ProtocolLib.jar')
     implementation 'mysql:mysql-connector-java:8.0.33'
 
     implementation 'fr.mrmicky:fastboard:2.1.3'

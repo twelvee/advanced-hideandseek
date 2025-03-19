@@ -1,10 +1,22 @@
 package ru.bandamc.advancedHNS.events;
 
+import com.google.protobuf.MapEntry;
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.bandamc.advancedHNS.AdvancedHNS;
 import ru.bandamc.advancedHNS.entities.Arena;
@@ -26,6 +38,7 @@ public class OnPlayerTakeDamageEvent implements Listener {
                             break;
                         }
                     }
+                    // todo: disable damage for players if they are hide as solid block
                     if (event.getCause() == EntityDamageEvent.DamageCause.FALL
                             || event.getCause() == EntityDamageEvent.DamageCause.DROWNING
                             || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION
@@ -59,5 +72,51 @@ public class OnPlayerTakeDamageEvent implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        AdvancedHNS plugin = JavaPlugin.getPlugin(AdvancedHNS.class);
+        // simulate block hit
+        if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+            Block block = event.getClickedBlock();
+            if (plugin.playerArena.containsKey(event.getPlayer())) {
+                // player is playing on arena
+                Arena arena = plugin.playerArena.get(event.getPlayer());
+                if (arena.getStatus() != 3) {
+                    return;
+                }
+                boolean hit = false;
+                for (var pb : arena.spawnedBlocks.entrySet()) {
+                    if (pb.getValue() == event.getClickedBlock()) {
+                        pb.getKey().damage(5); // todo: make it customizable
+                        Location newLocation = event.getPlayer().getLocation();
+                        newLocation.setY(newLocation.getY() - 1);
+                        PlayerMoveEvent playerMove = new PlayerMoveEvent(event.getPlayer(), event.getPlayer().getLocation(), newLocation);
+                        Bukkit.getPluginManager().callEvent(playerMove);
+
+                        // Create firework?
+                        FireworkEffect effect = FireworkEffect.builder()
+                                .withColor(Color.RED)
+                                .withFade(Color.YELLOW)
+                                .build();
+                        Firework firework = (Firework) Bukkit.getWorld(arena.getWorld()).spawnEntity(newLocation, EntityType.FIREWORK);
+                        FireworkMeta meta = firework.getFireworkMeta();
+                        meta.setPower(1);
+                        meta.addEffect(effect);
+                        firework.setFireworkMeta(meta);
+                        firework.detonate();
+                        hit = true;
+                        break;
+                    }
+                }
+                if (!hit) {
+                    event.getPlayer().damage(0.5f);
+                }
+            }
+        }/* else if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            Block block = event.getClickedBlock();
+
+        }*/
     }
 }

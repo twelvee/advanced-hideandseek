@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -47,6 +48,8 @@ public class Arena {
 
     ArrayList<String> errorMessages = new ArrayList<>();
     private int prepareTime = 60;
+
+    public HashMap<Player, Block> spawnedBlocks = new HashMap<>();
 
     public void setName(String name) {
         this.name = name;
