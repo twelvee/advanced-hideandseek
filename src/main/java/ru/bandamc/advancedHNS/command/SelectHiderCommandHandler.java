@@ -27,6 +27,10 @@ public class SelectHiderCommandHandler implements CommandHandler {
                 player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".general.not_in_arena"));
                 return true;
             }
+            if (arena.getStatus() != 1 && arena.getStatus() != 2) {
+                player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".general.change_team_error"));
+                return true;
+            }
 
             if(arena.getMaxHiders() <= arena.getHiders().size()) {
                 player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".general.max_amount_of_hiders_reached"));

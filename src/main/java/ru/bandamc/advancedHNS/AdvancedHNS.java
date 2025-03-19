@@ -1,22 +1,25 @@
 package ru.bandamc.advancedHNS;
 
+import com.destroystokyo.paper.ClientOption;
 import fr.mrmicky.fastboard.adventure.FastBoard;
 import org.bukkit.Bukkit;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 import ru.bandamc.advancedHNS.command.CommandExecutor;
 import ru.bandamc.advancedHNS.database.ArenaRepository;
+import ru.bandamc.advancedHNS.entities.Actor;
 import ru.bandamc.advancedHNS.entities.Arena;
+import ru.bandamc.advancedHNS.entities.Hider;
+import ru.bandamc.advancedHNS.entities.Seeker;
 import ru.bandamc.advancedHNS.events.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 
 public final class AdvancedHNS extends JavaPlugin {
@@ -25,7 +28,6 @@ public final class AdvancedHNS extends JavaPlugin {
     static public String HNS_CHAT_PREFIX = "§6[Advanced HideAndSeek]§f";
 
     private ArenaRepository arenaRepository;
-
 
     public HashMap<String, Arena> arenas = new HashMap<>();
     public HashMap<Arena, ArrayList<Player>> arenaPlayers = new HashMap<>();
@@ -100,6 +102,8 @@ public final class AdvancedHNS extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new OnPlayerBreakBlockEvent(), this);
         getServer().getPluginManager().registerEvents(new OnPlayerPlaceBlockEvent(), this);
+        getServer().getPluginManager().registerEvents(new OnPlayerJumpEvent(), this);
+        getServer().getPluginManager().registerEvents(new OnPlayerChangeWorldEvent(), this);
     }
 
     public ArenaRepository getArenaRepository() {
@@ -138,5 +142,39 @@ public final class AdvancedHNS extends JavaPlugin {
         } catch (SQLException e) {
             getLogger().severe(HNS_PREFIX + " Failed to connect to database: " + e.getMessage());
         }
+    }
+
+    public void startArenaTimer(Arena arena) {
+        BukkitTask task = Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> {
+            for (Actor actor : arena.getPlayers().values()) {
+                if (actor.getPlayer().hasMetadata("activeBossBar")) {
+                    String language = actor.getPlayer().getClientOption(ClientOption.LOCALE);
+                    var bossbar = (BossBar) actor.getPlayer().getMetadata("activeBossBar").get(0).value();
+                    if (actor instanceof Hider) {
+                        bossbar.setTitle(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".bossbars.hiders_start").replace("{time}", arena.getPrepareTime() + ""));
+                    }
+                    if (actor instanceof Seeker) {
+                        bossbar.setTitle(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".bossbars.seekers_start").replace("{time}", arena.getPrepareTime() + ""));
+                    }
+                }
+            }
+            arena.decreasePrepareTime();
+        }, 0L, 20L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+            Bukkit.getScheduler().cancelTask(task.getTaskId());
+            for (Actor actor : arena.getPlayers().values()) {
+                if (actor.getPlayer().hasMetadata("activeBossBar")) {
+                    BossBar b = (BossBar) actor.getPlayer().getMetadata("activeBossBar").get(0).value();
+                    b.removePlayer(actor.getPlayer());
+                    b.removeAll();
+                }
+                if (actor.getPlayer().hasMetadata("seekerTimedOut")) {
+                    actor.getPlayer().removeMetadata("seekerTimedOut", this);
+                    actor.getPlayer().setWalkSpeed(0.2f);
+                    actor.getPlayer().setFlySpeed(0.2f);
+                }
+                actor.getPlayer().removeMetadata("activeBossBar", this);
+            }
+        }, 60 * 20);
     }
 }

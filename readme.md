@@ -7,7 +7,7 @@ Supports paper 1.20+. requires java 17+.
 - [x] Arena create/edit/delete/save
 - [x] Arena optimization (hashmaps)
 - [X] Arena join/leave
-- [ ] Arena start game (WIP)
+- [X] Arena start game
 - [ ] Arena finish game
 - [X] Select seekers / hiders
 - [ ] Select prop
@@ -15,8 +15,9 @@ Supports paper 1.20+. requires java 17+.
 - [X] Scoreboards
 - [ ] Chest menus WIP
 - [ ] Set available props for arena
-- [ ] Arena timers (main gameplay loop, seekers blind timer)
+- [ ] Arena timers (main gameplay loop) WIP
 - [ ] Rewards
 - [ ] Join/leave signs
+- [X] Bossbars
 - [X] Localized arena statuses
 - [X] Use players metadata (used for tracking if player is in arena or not)

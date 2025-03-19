@@ -1,11 +1,18 @@
 package ru.bandamc.advancedHNS.entities;
 
 import com.destroystokyo.paper.ClientOption;
+import net.kyori.adventure.bossbar.BossBarImplementation;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import ru.bandamc.advancedHNS.AdvancedHNS;
 import ru.bandamc.advancedHNS.LocalizationManager;
 
@@ -35,6 +42,7 @@ public class Arena {
     int status;
 
     ArrayList<String> errorMessages = new ArrayList<>();
+    private int prepareTime = 60;
 
     public void setName(String name) {
         this.name = name;
@@ -236,9 +244,9 @@ public class Arena {
                 //seeker
             }
         }
-        Bukkit.getLogger().info("Joining arena with maxplayers of "+maxPlayers+" and total amount of players is: "+nPlayers);
-        if (nPlayers+1 >= maxPlayers) hasFreeSpace = false;
-        if (nHiders+1 >= maxHiders) hasFreeSpace = false;
+        Bukkit.getLogger().info("Joining arena with maxplayers of " + maxPlayers + " and total amount of players is: " + nPlayers);
+        if (nPlayers + 1 >= maxPlayers) hasFreeSpace = false;
+        if (nHiders + 1 >= maxHiders) hasFreeSpace = false;
 
         return (this.status == 1 || this.status == 2) && hasFreeSpace;
     }
@@ -251,7 +259,7 @@ public class Arena {
                 Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.youre_in_arena")),
                 Component.text(name),
                 Component.text(""),
-                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status").replace("{status}", LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status_"+status))),
+                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status").replace("{status}", LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status_" + status))),
                 Component.text(""),
                 Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.hider")),
                 Component.text(""),
@@ -267,7 +275,7 @@ public class Arena {
                 Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.youre_in_arena")),
                 Component.text(name),
                 Component.text(""),
-                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status").replace("{status}", LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status_"+status))),
+                Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status").replace("{status}", LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status_" + status))),
                 Component.text(""),
                 Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.seeker")),
                 Component.text(""),
@@ -297,19 +305,88 @@ public class Arena {
 
     public ArrayList<Hider> getHiders() {
         ArrayList<Hider> hiders = new ArrayList<>();
-        for(var actor : this.players.values()) {
+        for (var actor : this.players.values()) {
             if (actor instanceof Hider)
-                hiders.add((Hider)actor);
+                hiders.add((Hider) actor);
         }
         return hiders;
     }
 
     public ArrayList<Hider> getSeekers() {
         ArrayList<Hider> hiders = new ArrayList<>();
-        for(var actor : this.players.values()) {
+        for (var actor : this.players.values()) {
             if (actor instanceof Hider)
-                hiders.add((Hider)actor);
+                hiders.add((Hider) actor);
         }
         return hiders;
+    }
+
+    public void start() {
+        this.status = 3;
+        for (var player : this.players.values()) {
+            String language = player.getPlayer().getClientOption(ClientOption.LOCALE);
+
+            if (player instanceof Seeker) {
+                player.getPlayer().teleport(this.getSeekersSpawnPos());
+                // blind seeker
+                // todo: timer to reset effect
+                player.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 61*20, 0, false,
+                        false));
+                player.getPlayer().setWalkSpeed(0);
+                player.getPlayer().setFlySpeed(0);
+                player.getPlayer().setMetadata("seekerTimedOut", new FixedMetadataValue(JavaPlugin.getPlugin(AdvancedHNS.class), true));
+                BossBar seekersStartBossBar = Bukkit.createBossBar(
+                        LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".bossbars.seekers_start").replace("{time}", "60"),
+                        BarColor.RED,
+                        BarStyle.SOLID
+                );
+                seekersStartBossBar.addPlayer(player.getPlayer());
+                player.getPlayer().setMetadata("activeBossBar", new FixedMetadataValue(JavaPlugin.getPlugin(AdvancedHNS.class), seekersStartBossBar));
+
+                JavaPlugin.getPlugin(AdvancedHNS.class).boards.get(player.getPlayer()).updateLines(
+                        Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.youre_in_arena")),
+                        Component.text(name),
+                        Component.text(""),
+                        Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status").replace("{status}", LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status_" + status))),
+                        Component.text(""),
+                        Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.seeker")),
+                        Component.text(""),
+                        Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.footer"))
+                );
+            }
+
+            if (player instanceof Hider) {
+                player.getPlayer().teleport(this.getHidersSpawnPos());
+                player.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60*20, 0, false, true));
+                BossBar hidersStartBossBar = Bukkit.createBossBar(
+                        LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".bossbars.hiders_start").replace("{time}", "60"),
+                        BarColor.GREEN,
+                        BarStyle.SOLID
+                );
+                hidersStartBossBar.addPlayer(player.getPlayer());
+                player.getPlayer().setMetadata("activeBossBar", new FixedMetadataValue(JavaPlugin.getPlugin(AdvancedHNS.class), hidersStartBossBar));
+
+                JavaPlugin.getPlugin(AdvancedHNS.class).boards.get(player).updateLines(
+                        Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.youre_in_arena")),
+                        Component.text(name),
+                        Component.text(""),
+                        Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status").replace("{status}", LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.status_" + status))),
+                        Component.text(""),
+                        Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.hider")),
+                        Component.text(""),
+                        Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.footer"))
+                );
+            }
+
+            JavaPlugin.getPlugin(AdvancedHNS.class).startArenaTimer(this);
+        }
+    }
+
+    public void decreasePrepareTime() {
+        this.prepareTime--;
+    }
+
+    public int getPrepareTime() {
+        return this.prepareTime;
     }
 }

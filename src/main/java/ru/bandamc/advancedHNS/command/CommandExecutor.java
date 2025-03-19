@@ -39,6 +39,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
     private final SetMinHidersCommandHandler setMinHidersCommandHandler;
     private final SetMinSeekersCommandHandler setMinSeekersCommandHandler;
     private final SetMaxPlayersCommandHandler setMaxPlayersCommandHandler;
+    private final StartArenaCommandHandler startArenaCommandHandler;
 
     private final JoinCommandHandler joinCommandHandler;
     private final LeaveCommandHandler leaveCommandHandler;
@@ -65,6 +66,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
         setMinHidersCommandHandler = new SetMinHidersCommandHandler();
         setMinSeekersCommandHandler = new SetMinSeekersCommandHandler();
         setMaxPlayersCommandHandler = new SetMaxPlayersCommandHandler();
+        startArenaCommandHandler = new StartArenaCommandHandler();
 
         joinCommandHandler = new JoinCommandHandler();
         leaveCommandHandler = new LeaveCommandHandler();
@@ -114,6 +116,9 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
                         }
                         if (args[2].equalsIgnoreCase("save")) {
                             return saveArenaCommandHandler.Handle(sender, command, label, args);
+                        }
+                        if (args[2].equalsIgnoreCase("start")) {
+                            return startArenaCommandHandler.Handle(sender, command, label, args);
                         }
                         if (args[2].equalsIgnoreCase("pos1")) {
                             return setPos1CommandHandler.Handle(sender, command, label, args);
@@ -181,7 +186,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor, TabC
         }
 
         if (args.length == 3 && args[0].equalsIgnoreCase("admin") && args[1].equalsIgnoreCase("arena")) {
-            return Arrays.asList("create", "delete", "edit", "save", "pos1", "pos2", "spec", "lobby", "seekers_spawn", "hiders_spawn", "max_hiders", "max_seekers", "max_players", "min_hiders", "min_seekers");
+            return Arrays.asList("start", "create", "delete", "edit", "save", "pos1", "pos2", "spec", "lobby", "seekers_spawn", "hiders_spawn", "max_hiders", "max_seekers", "max_players", "min_hiders", "min_seekers");
         }
 
         // create

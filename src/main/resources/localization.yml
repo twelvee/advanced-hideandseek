@@ -1,4 +1,7 @@
 ru:
+  bossbars:
+    seeker_start: "Противоположная команда прячится. Осталось {time} секунд"
+    hiders_start: "У вас есть {time} секунд чтобы спрятаться"
   scoreboard:
     youre_in_arena: "Вы на арене"
     hider: "§aПрячущийся"
@@ -23,6 +26,7 @@ ru:
     max_amount_of_seekers_reached: "Не получилось, слишком много охотников."
     join_hider: "Успешно зашли в команду прячущихся."
     join_seeker: "Успешно зашли в команду охотников."
+    change_team_error: "Сейчас вы не можете изменить команду."
   admin:
     teleported_to_world: "Успешно телепортирован в мир {world}"
     arena_create_success: "Арена {name} успешно создана."
@@ -56,6 +60,9 @@ ru:
     arena_maxplayers_set: "Максимальное количество игроков установлено на {number} для арены {name}."
 
 en:
+  bossbars:
+    seeker_start: "Another team is hiding, {time} seconds left"
+    hiders_start: "You have {time} seconds to hide"
   scoreboard:
     youre_in_arena: "You're at the arena:"
     hider: "§aHider"
@@ -80,6 +87,7 @@ en:
     max_amount_of_seekers_reached: "Failed, too much seekers."
     join_hider: "Joined hiders team."
     join_seeker: "Joined seekers team."
+    change_team_error: "You can't change your team right now."
   admin:
     teleported_to_world: "Successfully teleported to {world}"
     arena_create_success: "Arena {name} was successfully created."
