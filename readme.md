@@ -19,4 +19,4 @@ Supports paper 1.20+. requires java 17+.
 - [ ] Rewards
 - [ ] Join/leave signs
 - [X] Localized arena statuses
-- [ ] Use players metadata
+- [X] Use players metadata (used for tracking if player is in arena or not)

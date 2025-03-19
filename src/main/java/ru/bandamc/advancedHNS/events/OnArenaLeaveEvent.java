@@ -3,6 +3,7 @@ package ru.bandamc.advancedHNS.events;
 import com.destroystokyo.paper.ClientOption;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.bandamc.advancedHNS.AdvancedHNS;
 import ru.bandamc.advancedHNS.api.events.ArenaJoinEvent;
@@ -18,5 +19,6 @@ public class OnArenaLeaveEvent implements Listener {
             event.getArena().setStatus(1); // set "Ready"
         }
         plugin.boards.get(event.getPlayer()).updateLines();
+        event.getPlayer().setMetadata("in_arena", new FixedMetadataValue(JavaPlugin.getPlugin(AdvancedHNS.class), false));
     }
 }

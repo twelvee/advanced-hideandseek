@@ -5,6 +5,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Statistic;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.bandamc.advancedHNS.AdvancedHNS;
 import ru.bandamc.advancedHNS.LocalizationManager;
@@ -16,12 +17,15 @@ import static org.bukkit.Bukkit.getServer;
 public class OnArenaJoinEvent implements Listener {
     @EventHandler
     public void onArenaJoin(ArenaJoinEvent event) {
-        if (!event.getArena().isReadyToJoin())
+        if (!event.getArena().isReadyToJoin()) {
             event.setCancelled(true);
+            return;
+        }
 
         if(event.getArena().getPlayers().isEmpty()) {
             event.getArena().setStatus(2); // set "Waiting for players status"
         }
         event.getArena().joinHiders(event.getPlayer());
+        event.getPlayer().setMetadata("in_arena", new FixedMetadataValue(JavaPlugin.getPlugin(AdvancedHNS.class), true));
     }
 }

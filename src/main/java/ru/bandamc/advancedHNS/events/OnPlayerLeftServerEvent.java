@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.bandamc.advancedHNS.AdvancedHNS;
 import ru.bandamc.advancedHNS.api.events.ArenaLeaveEvent;
@@ -22,7 +23,7 @@ public class OnPlayerLeftServerEvent implements Listener {
                 plugin.arenaPlayers.get(arena).remove(event.getPlayer());
             }
             plugin.playerArena.remove(event.getPlayer());
-
+            event.getPlayer().setMetadata("in_arena", new FixedMetadataValue(JavaPlugin.getPlugin(AdvancedHNS.class), false));
             // call arena leave event if player was on arena.
             ArenaLeaveEvent leaveEvent = new ArenaLeaveEvent(event.getPlayer(), arena);
             Bukkit.getPluginManager().callEvent(leaveEvent);

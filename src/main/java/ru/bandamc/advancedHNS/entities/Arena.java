@@ -225,7 +225,22 @@ public class Arena {
 
     public boolean isReadyToJoin() {
         // todo: validate seekers and hiders min amounts
-        return this.status == 1;
+        boolean hasFreeSpace = true;
+        int nHiders = 0;
+        int nPlayers = 0;
+        for (Actor actor : this.players.values()) {
+            nPlayers++;
+            if (actor instanceof Hider) {
+                nHiders++;
+            } else {
+                //seeker
+            }
+        }
+        Bukkit.getLogger().info("Joining arena with maxplayers of "+maxPlayers+" and total amount of players is: "+nPlayers);
+        if (nPlayers+1 >= maxPlayers) hasFreeSpace = false;
+        if (nHiders+1 >= maxHiders) hasFreeSpace = false;
+
+        return (this.status == 1 || this.status == 2) && hasFreeSpace;
     }
 
     public void joinHiders(Player player) {
