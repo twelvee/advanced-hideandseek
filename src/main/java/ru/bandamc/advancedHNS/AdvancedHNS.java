@@ -105,6 +105,7 @@ public final class AdvancedHNS extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnPlayerJumpEvent(), this);
         getServer().getPluginManager().registerEvents(new OnPlayerChangeWorldEvent(), this);
         getServer().getPluginManager().registerEvents(new OnPlayerGUIEvents(), this);
+        getServer().getPluginManager().registerEvents(new OnPlayerTakeDamageEvent(), this);
     }
 
     public ArenaRepository getArenaRepository() {
