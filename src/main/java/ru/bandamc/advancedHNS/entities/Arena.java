@@ -366,7 +366,7 @@ public class Arena {
                 hidersStartBossBar.addPlayer(player.getPlayer());
                 player.getPlayer().setMetadata("activeBossBar", new FixedMetadataValue(JavaPlugin.getPlugin(AdvancedHNS.class), hidersStartBossBar));
 
-                JavaPlugin.getPlugin(AdvancedHNS.class).boards.get(player).updateLines(
+                JavaPlugin.getPlugin(AdvancedHNS.class).boards.get(player.getPlayer()).updateLines(
                         Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.youre_in_arena")),
                         Component.text(name),
                         Component.text(""),

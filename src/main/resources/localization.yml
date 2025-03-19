@@ -1,6 +1,8 @@
 ru:
+  menus:
+    select_team_menu: "Выберите команду"
   bossbars:
-    seeker_start: "Противоположная команда прячится. Осталось {time} секунд"
+    seekers_start: "Противоположная команда прячится. Осталось {time} секунд"
     hiders_start: "У вас есть {time} секунд чтобы спрятаться"
   scoreboard:
     youre_in_arena: "Вы на арене"
@@ -16,6 +18,7 @@ ru:
     header: "§b§lПРЯТКИ"
     footer: "Сайт: bandamc.ru"
   general:
+    of: "из"
     join_arena: "Вы успешно вошли на арену {name}."
     join_arena_failed: "Не получилось перейти на арену."
     already_in_arena: "Вы уже находитесь на арене {name}."
@@ -60,8 +63,10 @@ ru:
     arena_maxplayers_set: "Максимальное количество игроков установлено на {number} для арены {name}."
 
 en:
+  menus:
+    select_team_menu: "Select your team"
   bossbars:
-    seeker_start: "Another team is hiding, {time} seconds left"
+    seekers_start: "Another team is hiding, {time} seconds left"
     hiders_start: "You have {time} seconds to hide"
   scoreboard:
     youre_in_arena: "You're at the arena:"
@@ -77,6 +82,7 @@ en:
     header: "§b§lHIDE AND SEEK"
     footer: "Website: bandamc.ru"
   general:
+    of: "of"
     join_arena: "You're successfully joined {name}."
     join_arena_failed: "Failed to join the arena."
     already_in_arena: "You're already on {name} arena."

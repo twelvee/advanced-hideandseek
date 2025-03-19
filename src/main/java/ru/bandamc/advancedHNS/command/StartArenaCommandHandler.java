@@ -25,7 +25,10 @@ public class StartArenaCommandHandler implements CommandHandler {
                 player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".general.not_in_arena"));
                 return true;
             }
-
+            if (arena.getStatus() != 1 && arena.getStatus() != 2) {
+                player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".general.change_team_error"));
+                return true;
+            }
             ArenaStartEvent event = new ArenaStartEvent(player, arena);
             Bukkit.getPluginManager().callEvent(event);
 
