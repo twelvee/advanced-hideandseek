@@ -20,8 +20,8 @@ public class OnPlayerTakeDamageEvent implements Listener {
                 if (arena.getStatus() != 3) {
                     event.setCancelled(true);
                 } else {
-                    for (var seeker : arena.getSeekers()) {
-                        if (seeker.getPlayer() == player) {
+                    for (var hider : arena.getHiders()) {
+                        if (hider.getPlayer() == player) {
                             event.setCancelled(true);
                             break;
                         }

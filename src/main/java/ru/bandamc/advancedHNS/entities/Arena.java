@@ -397,9 +397,8 @@ public class Arena {
                         Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.footer"))
                 );
             }
-
-            JavaPlugin.getPlugin(AdvancedHNS.class).startArenaTimer(this);
         }
+        JavaPlugin.getPlugin(AdvancedHNS.class).startArenaTimer(this);
     }
 
     public void decreasePrepareTime() {
