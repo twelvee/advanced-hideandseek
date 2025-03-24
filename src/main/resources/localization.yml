@@ -1,6 +1,8 @@
 ru:
   menus:
     select_team_menu: "Выберите команду"
+    select_block_menu: "Выберите свой образ"
+    leave_arena: "Выйти из арены"
   bossbars:
     seekers_start: "Противоположная команда прячится. Осталось {time} секунд"
     hiders_start: "У вас есть {time} секунд чтобы спрятаться"
@@ -30,6 +32,8 @@ ru:
     join_hider: "Успешно зашли в команду прячущихся."
     join_seeker: "Успешно зашли в команду охотников."
     change_team_error: "Сейчас вы не можете изменить команду."
+    select_block_error: "Сейчас вы не можете выбрать образ."
+    select_block_success: "Теперь вы выглядите как блок {material}."
   admin:
     teleported_to_world: "Успешно телепортирован в мир {world}"
     arena_create_success: "Арена {name} успешно создана."
@@ -65,6 +69,8 @@ ru:
 en:
   menus:
     select_team_menu: "Select your team"
+    select_block_menu: "Select your skin"
+    leave_arena: "Leave arena"
   bossbars:
     seekers_start: "Another team is hiding, {time} seconds left"
     hiders_start: "You have {time} seconds to hide"
@@ -94,6 +100,8 @@ en:
     join_hider: "Joined hiders team."
     join_seeker: "Joined seekers team."
     change_team_error: "You can't change your team right now."
+    select_block_error: "You can't change your skin right now."
+    select_block_success: "Now you look like {material}."
   admin:
     teleported_to_world: "Successfully teleported to {world}"
     arena_create_success: "Arena {name} was successfully created."

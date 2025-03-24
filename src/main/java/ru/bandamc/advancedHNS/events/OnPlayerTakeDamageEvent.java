@@ -111,7 +111,7 @@ public class OnPlayerTakeDamageEvent implements Listener {
                     }
                 }
                 if (!hit) {
-                    event.getPlayer().damage(0.5f);
+                    event.getPlayer().damage(2f);
                 }
             }
         }/* else if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
