@@ -40,28 +40,30 @@ public class OnPlayerMoveEvent implements Listener {
                             int taskId = (int) event.getPlayer().getMetadata("solidBlockCheck").get(0).value();
                             Bukkit.getScheduler().cancelTask(taskId);
                         }
-                        Material m = (Material) hider.getPlayer().getMetadata("currentBlock").get(0).value();
-                        if (!DisguiseAPI.isDisguised(hider.getPlayer())) {
-                            DisguiseAPI.disguiseToAll(hider.getPlayer(), new MiscDisguise(DisguiseType.FALLING_BLOCK, m));
-                            hider.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
-                            Block d = arena.spawnedBlocks.get(hider);
-                            if (d != null) {
-                                Bukkit.getWorld(arena.getWorld()).setBlockData(d.getLocation(), Material.AIR.createBlockData());
+                        if (event.getPlayer().hasMetadata("currentBlock")) {
+                            Material m = (Material) hider.getPlayer().getMetadata("currentBlock").get(0).value();
+                            if (!DisguiseAPI.isDisguised(hider.getPlayer())) {
+                                DisguiseAPI.disguiseToAll(hider.getPlayer(), new MiscDisguise(DisguiseType.FALLING_BLOCK, m));
+                                hider.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
+                                Block d = arena.spawnedBlocks.get(hider);
+                                if (d != null) {
+                                    Bukkit.getWorld(arena.getWorld()).setBlockData(d.getLocation(), Material.AIR.createBlockData());
+                                }
                             }
+                            int taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                                if (hider.getPlayer().hasMetadata("currentBlock")) {
+                                    hider.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, false, false));
+                                    Bukkit.getWorld(arena.getWorld()).setBlockData(hider.getPlayer().getLocation().getBlock().getLocation(), m.createBlockData());
+                                    Location l = hider.getPlayer().getLocation();
+                                    Block b = Bukkit.getWorld(arena.getWorld()).getBlockAt(l);
+                                    l.setY(l.getY() + 1);
+                                    hider.getPlayer().teleport(l);
+                                    DisguiseAPI.undisguiseToAll(hider.getPlayer());
+                                    arena.spawnedBlocks.put(hider.getPlayer(), b);
+                                }
+                            }, 3 * 20);
+                            hider.getPlayer().setMetadata("solidBlockCheck", new FixedMetadataValue(plugin, taskId));
                         }
-                        int taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                            if (hider.getPlayer().hasMetadata("currentBlock")) {
-                                hider.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, false, false));
-                                Bukkit.getWorld(arena.getWorld()).setBlockData(hider.getPlayer().getLocation().getBlock().getLocation(), m.createBlockData());
-                                Location l = hider.getPlayer().getLocation();
-                                Block b = Bukkit.getWorld(arena.getWorld()).getBlockAt(l);
-                                l.setY(l.getY() + 1);
-                                hider.getPlayer().teleport(l);
-                                DisguiseAPI.undisguiseToAll(hider.getPlayer());
-                                arena.spawnedBlocks.put(hider.getPlayer(), b);
-                            }
-                        }, 3 * 20);
-                        hider.getPlayer().setMetadata("solidBlockCheck", new FixedMetadataValue(plugin, taskId));
                     }
                 }
             }
