@@ -32,16 +32,6 @@ public class LeaveCommandHandler implements CommandHandler {
             Bukkit.getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
-                if (!plugin.arenaPlayers.containsKey(arena)) {
-                    plugin.arenaPlayers.put(arena, new ArrayList<>());
-                }
-
-                plugin.arenaPlayers.get(arena).remove(player);
-                plugin.playerArena.remove(player);
-
-                player.teleport(Bukkit.getWorld("world").getSpawnLocation()); // todo: make default world customizable?
-
-                player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".general.left_arena"));
                 return true;
             }
 

@@ -267,7 +267,7 @@ public class Arena {
                 //seeker
             }
         }
-        Bukkit.getLogger().info("Joining arena with maxplayers of " + maxPlayers + " and total amount of players is: " + nPlayers);
+        //Bukkit.getLogger().info("Joining arena with maxplayers of " + maxPlayers + " and total amount of players is: " + nPlayers);
         if (nPlayers + 1 >= maxPlayers) hasFreeSpace = false;
         if (nHiders + 1 >= maxHiders) hasFreeSpace = false;
 

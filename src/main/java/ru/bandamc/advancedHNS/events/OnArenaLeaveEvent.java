@@ -14,8 +14,11 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import ru.bandamc.advancedHNS.AdvancedHNS;
+import ru.bandamc.advancedHNS.LocalizationManager;
 import ru.bandamc.advancedHNS.api.events.ArenaJoinEvent;
 import ru.bandamc.advancedHNS.api.events.ArenaLeaveEvent;
+
+import java.util.ArrayList;
 
 public class OnArenaLeaveEvent implements Listener {
     @EventHandler
@@ -54,5 +57,16 @@ public class OnArenaLeaveEvent implements Listener {
         event.getPlayer().removePotionEffect(PotionEffectType.SPEED);
         event.getPlayer().removePotionEffect(PotionEffectType.BLINDNESS);
         event.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
+
+        if (!plugin.arenaPlayers.containsKey(event.getArena())) {
+            plugin.arenaPlayers.put(event.getArena(), new ArrayList<>());
+        }
+
+        plugin.arenaPlayers.get(event.getArena()).remove(event.getPlayer());
+        plugin.playerArena.remove(event.getPlayer());
+
+        event.getPlayer().teleport(Bukkit.getWorld("world").getSpawnLocation()); // todo: make default world customizable?
+
+        event.getPlayer().sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".general.left_arena"));
     }
 }

@@ -15,42 +15,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 import ru.bandamc.advancedHNS.AdvancedHNS;
 import ru.bandamc.advancedHNS.LocalizationManager;
 import ru.bandamc.advancedHNS.api.events.ArenaStartEvent;
+import ru.bandamc.advancedHNS.api.events.PlayerOpenTeamSelectMenu;
 import ru.bandamc.advancedHNS.entities.Arena;
 
 public class SelectTeamGUICommandHandler implements CommandHandler {
 
     @Override
     public boolean Handle(CommandSender sender, Command command, String label, String[] args) {
-        AdvancedHNS plugin = JavaPlugin.getPlugin(AdvancedHNS.class);
         if (sender instanceof Player player) {
-            String language = player.getClientOption(ClientOption.LOCALE);
-            Arena arena = plugin.playerArena.get(player);
-            if (arena == null) {
-                player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".general.not_in_arena"));
-                return true;
-            }
-            if (arena.getStatus() != 1 && arena.getStatus() != 2) {
-                player.sendMessage(AdvancedHNS.HNS_CHAT_PREFIX + " " + LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".general.change_team_error"));
-                return true;
-            }
-
-            Inventory menu = Bukkit.createInventory(player, 9, Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".menus.select_team_menu")));
-            // Add items to the menu
-            ItemStack seekerTeam = new ItemStack(Material.IRON_SWORD);
-            ItemMeta seekerMeta = seekerTeam.getItemMeta();
-            seekerMeta.displayName(Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.seeker")));
-            seekerTeam.setItemMeta(seekerMeta);
-            menu.setItem(3, seekerTeam);
-
-            ItemStack hiderTeam = new ItemStack(Material.BOOK);
-            ItemMeta hiderMeta = seekerTeam.getItemMeta();
-            hiderMeta.displayName(Component.text(LocalizationManager.getInstance().getLocalization(LocalizationManager.getInstance().getLocale(language) + ".scoreboard.hider")));
-            hiderTeam.setItemMeta(hiderMeta);
-            menu.setItem(5, hiderTeam);
-
-            player.openInventory(menu);
-            player.setMetadata("HNSOpenedInventory", new FixedMetadataValue(plugin, menu));
-            player.setMetadata("HNSOpenedInventoryName", new FixedMetadataValue(plugin, "_select_team_gui_"));
+            PlayerOpenTeamSelectMenu event = new PlayerOpenTeamSelectMenu(player);
+            Bukkit.getPluginManager().callEvent(event);
             return true;
         }
 
